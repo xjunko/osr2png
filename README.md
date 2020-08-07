@@ -4,13 +4,6 @@ A program that converts osu! replay file into thumbnail.
 ## Intro
 Created this because I want to learn pygame, it's bad.
 
-## Download
-
-
-
-
-
-
 
 ## Requirements
 * wget in your enviroment path
@@ -26,7 +19,7 @@ Insert your osu! api key in the settings.json, then run the `runner.py` or run t
 Import osr2png.ReplayThumbnail class then give it
 * Replay File (.osr)
 * osu! api key
-* Force Download (Optional, only use it when the downloaded image change such as profile picture)
+* Force Download (Optional, only use it when the downloaded image changed such as profile picture)
 
 ## Faq
 > What the fuck is that pp api in the osr2png.py?
