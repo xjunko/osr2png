@@ -1,5 +1,5 @@
 import argparse
-from main import ReplayThumbnail
+from osr2png import ReplayThumbnail
 from osrparse import parse_replay_file
 from osrparse.enums import Mod
 import json,sys
