@@ -22,6 +22,8 @@ Import osr2png.ReplayThumbnail class then give it
 * Force Download (Optional, only use it when the downloaded image changed such as profile picture)
 
 ## Faq
+> Why you didnt use osu! files to get the background, etc?
+* soontm when I come back after my cbt session
 > What the fuck is that pp api in the osr2png.py?
 * Lazy to download the .osu file and just lazy. Might add local pp calculator.
 > It's shit
