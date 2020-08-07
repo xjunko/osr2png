@@ -61,7 +61,7 @@ class ReplayThumbnail:
         try:
             self.replaydata = parse_replay_file(self.replayfile)
 
-            # mod fix for new osrparse - idk how to read enums so ill use this
+            # mod fix for new osrparse - idk how to convert it into numbers so ill use this
             for x in self.replaydata.mod_combination:
                 mods += x.value
             self.replaydata.mod_combination = mods
@@ -103,11 +103,11 @@ class ReplayThumbnail:
         return data
 
     def __get_map_bg__(self, mapID):
-        # u can jsut not call this function and just skip to pygame if u have the image
+        # u can just not call this function and just skip to pygame if u have the image
         subprocess.call(f'wget {self.wgetargs} -O ./img/{mapID}.png https://bloodcat.com/osu/i/{mapID}')
 
     def __get_player_pfp__(self, userID):
-        # u can jsut not call this function and just skip to pygame if u have the image
+        # u can just not call this function and just skip to pygame if u have the image
         subprocess.call(f'wget {self.wgetargs} -O ./img/{userID}.png https://a.ppy.sh/{userID}')
 
     def __get_pp__(self):
@@ -136,8 +136,9 @@ class ReplayThumbnail:
 
 
         # oh god here we go
-        # before i rewrite this it used to be an undreadable shit
+        # before i rewrite this it used to be an unreadable shit
         # somehow i managed to rewrite it
+        # and it still unreadable
         if xoffset and not negative:
             args.append([self.height/2-textren.get_width()/2+textren.get_width()/2+xoffset+5, self.width/2-yoffset/2+5])
             args.append([self.height/2-textren.get_width()/2+textren.get_width()/2+xoffset, self.width/2-yoffset/2])
@@ -172,7 +173,7 @@ class ReplayThumbnail:
         self.bg['image'] = pygame.image.load(f"{self.dir}{self.mapData['beatmap_id']}.png")
         self.bg['bgX'], self.bg['bgY'] = self.bg['image'].get_rect().size
 
-        # bg resize (newly added!! fresh from farm!!)
+        # bg resize - proud of this one
         newBGRes = self.height/self.bg['bgX']      
 
         self.bg['image'] = pygame.transform.rotozoom(self.bg['image'], 0, newBGRes) 
@@ -226,7 +227,6 @@ class ReplayThumbnail:
         return str(n)
 
     def render_and_save(self):
-        # i did this in one go so fuckk yes finally !!!!!!!!!!!
         pygame.display.flip()
         pygame.image.save(self.screen, f'[{self.userData["username"]}][{getMods(self.replaydata.mod_combination)}] {self.mapData["creator"]} - {self.mapData["title"]} [{self.mapData["version"]}].png')
 
