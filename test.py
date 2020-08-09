@@ -20,7 +20,7 @@ replayData = parse_replay_file(replayFile)
 
 
 # Run
-osr2png(replayData, '78b9a37dca0884fee07ff3b7c3853e3e8615d422', bgdir).run()
+osr2png(replayData, 'fuck', bgdir).run()
 
 
 
