@@ -30,7 +30,7 @@ replayData = parse_replay_file(replayFile)
 
 
 # Run
-osr2png(replayData, jsonStuff['osukey'], bgdir).run()
+osr2png(replayData, jsonStuff['osukey'], mapdata,bgdir).run()
 
 
 

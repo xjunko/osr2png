@@ -1,8 +1,8 @@
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 import requests, subprocess
 
 class osr2png:
-    def __init__(self, replaydata, apikey, mapbg=None,outdir='img/',redl=False):
+    def __init__(self, replaydata, apikey, mapdata, mapbg=None, outdir='img/', redl=False):
         self.replay = replaydata
         self.apiKey = apikey
         self.reDL = redl
@@ -16,9 +16,11 @@ class osr2png:
         self.mapBG = 'data/bg.png' if mapbg is None else mapbg
         self.starImage = 'data/star.png'
         self.avatar = None
+        self.font = None
+        self.imageDraw = None
 
         # osu stuff
-        self.mapData = None
+        self.mapData = mapdata
         self.userData = None
         self.acc = 0
         self.pp = None
@@ -27,14 +29,6 @@ class osr2png:
         self.UrlBeatmapApi = f'https://osu.ppy.sh/api/get_beatmaps?k={self.apiKey}&h='
         self.UrlUserdataApi = f'https://osu.ppy.sh/api/get_user?k={self.apiKey}&u='
 
-
-    def getBeatmap(self, mapHash):
-        try:
-            data = requests.get(f'{self.UrlBeatmapApi}{mapHash}').json()[0]
-        except Exception as e:
-            return e
-
-        return data
 
     def getUserdata(self, id):
         try:
@@ -49,7 +43,6 @@ class osr2png:
 
 
     def __init_replay_data__(self):
-        self.mapData = self.getBeatmap(self.replay.beatmap_hash)
         self.userData = self.getUserdata(self.replay.player_name)
         self.get_player_pfp(self.userData['user_id'])
         self.avatar = f'img/{self.userData["user_id"]}.png'
@@ -58,6 +51,8 @@ class osr2png:
 
     def __init_base_image__(self):
         self.bg['base'] = Image.new('RGBA', (self.width,self.height), (0, 0, 0)) # create blank/black image
+        self.font = ImageFont.truetype('data/font.ttf', size=55) # font
+        self.imageDraw = ImageDraw.Draw(self.bg['base']) # text thing
 
 
         # load bg
@@ -85,6 +80,32 @@ class osr2png:
         self.bg['border'] = Image.new("RGBA", (205,205), (220,220,220))
         self.bg['borderX'], self.bg['borderY'] = self.bg['border'].size
 
+
+
+    def drawText(self, text, color=(255,255,255), shadowcolor=(0,0,0), xoffset=0, yoffset=0, shadowoffset=5):
+        negative = '-' in str(xoffset)
+        shadowoffset = shadowoffset
+        textW, textH = self.imageDraw.textsize(text,font=self.font)
+        args = []
+
+        if xoffset and not negative:
+            args.append([ (self.width-textW+textW)/2+xoffset+shadowoffset , (self.height-textH)/2+shadowoffset])
+            args.append([ (self.width-textW+textW)/2+xoffset , (self.height-textH)/2])
+        elif xoffset and negative:
+            args.append([ (self.width-textW-textW)/2+xoffset+shadowoffset , (self.height-textH)/2+shadowoffset])
+            args.append([ (self.width-textW-textW)/2+xoffset , (self.height-textH)/2])
+
+        elif not xoffset:
+            args.append([ (self.width-textW)/2+shadowoffset , (self.height-yoffset)/2+shadowoffset ])
+            args.append([ (self.width-textW)/2 , (self.height-yoffset)/2 ])
+            
+        
+        self.imageDraw.text(args[0], text, fill=shadowcolor, font=self.font)
+        self.imageDraw.text(args[1], text, fill=color, font=self.font)
+
+        return args
+
+
     def __join_image__(self):
         # bg
         self.bg['base'].paste(self.bg['mapBG'])
@@ -93,10 +114,15 @@ class osr2png:
         # avatar
         self.bg['base'].paste(self.bg['avatar'], (round((self.width-self.bg['avatarX'])/2), round((self.height-self.bg['avatarY'])/2)))
 
+        # test
+
+        self.drawText('song title aasadada', yoffset=550)
+        self.drawText('diff name', yoffset=400)
+
 
     def __save__(self):
         self.bg['base'].convert('RGB')
-        self.bg['base'].save('lol.png')
+        self.bg['base'].save(f"{self.replay.player_name} on idke.png")
 
 
 
