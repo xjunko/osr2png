@@ -103,6 +103,7 @@ class osr2png:
         self.__init_base_image__()
         self.__join_image__()
 
+        self.bg['base'].convert('RGB')
         self.bg['base'].save('lol.png')
 
 
