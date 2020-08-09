@@ -94,6 +94,11 @@ class osr2png:
         self.bg['base'].paste(self.bg['avatar'], (round((self.width-self.bg['avatarX'])/2), round((self.height-self.bg['avatarY'])/2)))
 
 
+    def __save__(self):
+        self.bg['base'].convert('RGB')
+        self.bg['base'].save('lol.png')
+
+
 
 
 
@@ -103,8 +108,10 @@ class osr2png:
         self.__init_base_image__()
         self.__join_image__()
 
-        self.bg['base'].convert('RGB')
-        self.bg['base'].save('lol.png')
+
+        # ae
+        self.__save__()
+        
 
 
 
