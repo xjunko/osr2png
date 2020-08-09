@@ -1,12 +1,38 @@
 from PIL import Image, ImageDraw, ImageFont
+import pyttanko as osu
 import requests, subprocess
+from Utils.runoppai import runOppai
+
+def getMods(modsNumber): # :) this is retarded but idc i cant think of something better
+    mods = {
+        0 : 'NM',
+        1 : 'NF',
+        2 : 'EZ',
+        4 : 'TD',
+        8 : 'HD',
+        16 : 'HR',
+        24 : 'HDHR',
+        64 : 'DT',
+        72 : 'HDDT',
+        88 : 'HDHRDT',
+        128 : 'RX',
+        1024 : 'FL',
+        256 : 'HT'
+    }
+    try:
+        return '+' + mods[modsNumber]
+    except:
+        return 
+
+
 
 class osr2png:
-    def __init__(self, replaydata, apikey, mapdata, mapbg=None, outdir='img/', redl=False):
-        self.replay = replaydata
+    def __init__(self, replay, apikey, mapdata, osufiledir, mapbg=None, outdir='data/', redl=False):
+        self.replay = replay
         self.apiKey = apikey
         self.reDL = redl
         self.outDir = outdir
+        self.mapDir = osufiledir
 
         # image stuff
         self.width = 1280
@@ -24,11 +50,12 @@ class osr2png:
         self.userData = None
         self.acc = 0
         self.pp = None
+        self.mods = None
+        self.starmodded = None
         self.wgetargs = '' if redl else '-nc'
 
         self.UrlBeatmapApi = f'https://osu.ppy.sh/api/get_beatmaps?k={self.apiKey}&h='
         self.UrlUserdataApi = f'https://osu.ppy.sh/api/get_user?k={self.apiKey}&u='
-
 
     def getUserdata(self, id):
         try:
@@ -38,15 +65,33 @@ class osr2png:
         return data
 
     def get_player_pfp(self, userID):
-        subprocess.call(f'wget {self.wgetargs} -O ./img/{userID}.png https://a.ppy.sh/{userID}')
+        subprocess.call(f'wget {self.wgetargs} -O {self.outDir}{userID}.png https://a.ppy.sh/{userID}')
 
-
+    def roundString(self, s: str, digits: int):
+        n = round(float(s), digits)
+        return str(n)
 
     def __init_replay_data__(self):
         self.userData = self.getUserdata(self.replay.player_name)
         self.get_player_pfp(self.userData['user_id'])
-        self.avatar = f'img/{self.userData["user_id"]}.png'
+        self.avatar = f'{self.outDir}{self.userData["user_id"]}.png'
 
+        mods = 0
+        # mod fix for new osrparse - idk how to read enums so ill use this
+        for x in self.replay.mod_combination:
+            mods += x.value
+
+        self.mods = getMods(mods)
+
+
+        # pee pee calculation
+        self.acc = (((self.replay.number_300s)*300+(self.replay.number_100s)*100+(self.replay.number_50s)*50+(self.replay.misses)*0)/((self.replay.number_300s+self.replay.number_100s+self.replay.number_50s+self.replay.misses)*300))*100
+        command = f'oppai.exe "{self.mapDir}" {self.acc}% {self.mods} {self.replay.max_combo}x {self.replay.misses}xm -ojson'
+        test = runOppai(command)
+        self.pp = self.roundString(test[0],2)
+        self.starmodded = self.roundString(test[1],2)
+
+        
 
 
     def __init_base_image__(self):
@@ -75,6 +120,7 @@ class osr2png:
 
         # load star
         self.bg['star'] = Image.open(self.starImage).convert('RGBA').resize((64,64))
+        self.bg['starX'], self.bg['starY'] = self.bg['star'].size
 
         # border test
         self.bg['border'] = Image.new("RGBA", (205,205), (220,220,220))
@@ -89,11 +135,11 @@ class osr2png:
         args = []
 
         if xoffset and not negative:
-            args.append([ (self.width-textW+textW)/2+xoffset+shadowoffset , (self.height-textH)/2+shadowoffset])
-            args.append([ (self.width-textW+textW)/2+xoffset , (self.height-textH)/2])
+            args.append([ (self.width-textW+textW)/2+xoffset+shadowoffset , (self.height-yoffset)/2+shadowoffset])
+            args.append([ (self.width-textW+textW)/2+xoffset , (self.height-yoffset)/2])
         elif xoffset and negative:
-            args.append([ (self.width-textW-textW)/2+xoffset+shadowoffset , (self.height-textH)/2+shadowoffset])
-            args.append([ (self.width-textW-textW)/2+xoffset , (self.height-textH)/2])
+            args.append([ (self.width-textW-textW)/2+xoffset+shadowoffset , (self.height-yoffset)/2+shadowoffset])
+            args.append([ (self.width-textW-textW)/2+xoffset , (self.height-yoffset)/2])
 
         elif not xoffset:
             args.append([ (self.width-textW)/2+shadowoffset , (self.height-yoffset)/2+shadowoffset ])
@@ -103,7 +149,7 @@ class osr2png:
         self.imageDraw.text(args[0], text, fill=shadowcolor, font=self.font)
         self.imageDraw.text(args[1], text, fill=color, font=self.font)
 
-        return args
+        return [textW,textH], args[1]
 
 
     def __join_image__(self):
@@ -114,15 +160,27 @@ class osr2png:
         # avatar
         self.bg['base'].paste(self.bg['avatar'], (round((self.width-self.bg['avatarX'])/2), round((self.height-self.bg['avatarY'])/2)))
 
-        # test
-
-        self.drawText('song title aasadada', yoffset=550)
-        self.drawText('diff name', yoffset=400)
+        # map title
+        self.drawText(f"{self.mapData[1]['artist_name']} - {self.mapData[1]['song_title']}", yoffset=550)
+        # diff name
+        self.drawText(self.mapData[1]['version'], yoffset=400)
+        # pee pee
+        self.drawText(f'{self.pp}pp', xoffset=120, yoffset=-60)
+        # star rating
+        star = self.drawText(f'{self.starmodded}', xoffset=120, yoffset=100)
+        # star logo thing
+        self.bg['base'].paste(self.bg['star'], ( round(star[1][0]+star[0][0]+5), round(star[1][1])), mask=self.bg['star'])
+        # acc
+        self.drawText(f'{self.roundString(self.acc, 2)}%',xoffset=-120, yoffset=100)
+        # mods
+        self.drawText(f'{self.mods}', xoffset=-120, yoffset=-60)
 
 
     def __save__(self):
-        self.bg['base'].convert('RGB')
-        self.bg['base'].save(f"{self.replay.player_name} on idke.png")
+        mapTitle = self.mapData[0].info['Metadata'].split('\n')[0]
+        self.bg['base'] = self.bg['base'].convert('RGB')
+        self.bg['base'].save(f"[{self.mods}]{self.replay.player_name} on {self.mapData[1]['song_title']} [{self.mapData[1]['version']}].jpg")
+
 
 
 

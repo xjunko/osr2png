@@ -9,8 +9,8 @@ import os, json
 # real shit happens on the main.py
 #
 
-if not os.path.isdir('img'):
-    os.mkdir('img')
+if not os.path.isdir('data'):
+    os.mkdir('data')
 
 jsonStuff = json.loads(open('settings.json').read())
 
@@ -30,7 +30,7 @@ replayData = parse_replay_file(replayFile)
 
 
 # Run
-osr2png(replayData, jsonStuff['osukey'], mapdata,bgdir).run()
+osr2png(replayData, jsonStuff['osukey'], [mapdata,beatmap],osufiledir, bgdir).run()
 
 
 
