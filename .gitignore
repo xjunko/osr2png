@@ -13,6 +13,7 @@ __pycache__/
 *.osk
 settings.json
 img/*
+img/
 
 # Distribution / packaging
 .Python
