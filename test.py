@@ -2,9 +2,11 @@ from Utils.find_beatmap import find_beatmap_ as find_beatmap
 from Utils.osuparser import Beatmap, read_file
 from osrparse import parse_replay_file
 from main import osr2png
-import os
+import os, json
 
-osupath = r'C:\Users\Alif\AppData\Local\osu!'
+jsonStuff = json.loads(open('settings.json').read())
+
+osupath = jsonStuff['osudir']
 replayFile = 'replays/1.osr'
 
 # read osu stuff
@@ -20,7 +22,7 @@ replayData = parse_replay_file(replayFile)
 
 
 # Run
-osr2png(replayData, 'fuck', bgdir).run()
+osr2png(replayData, json['osukey'], bgdir).run()
 
 
 

@@ -11,7 +11,7 @@ __pycache__/
 *.osu
 *.osz
 *.osk
-
+settings.json
 img/*
 
 # Distribution / packaging
