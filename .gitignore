@@ -6,6 +6,12 @@ __pycache__/
 # C extensions
 *.so
 
+# osu
+*.osr
+*.osu
+*.osz
+*.osk
+
 # Distribution / packaging
 .Python
 build/
