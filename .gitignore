@@ -12,6 +12,8 @@ __pycache__/
 *.osz
 *.osk
 
+img/*
+
 # Distribution / packaging
 .Python
 build/
