@@ -4,6 +4,14 @@ from osrparse import parse_replay_file
 from main import osr2png
 import os, json
 
+#
+# just ignore the bad stuff here its just a runner
+# real shit happens on the main.py
+#
+
+if not os.path.isdir('img'):
+    os.mkdir('img')
+
 jsonStuff = json.loads(open('settings.json').read())
 
 osupath = jsonStuff['osudir']
@@ -22,7 +30,7 @@ replayData = parse_replay_file(replayFile)
 
 
 # Run
-osr2png(replayData, json['osukey'], bgdir).run()
+osr2png(replayData, jsonStuff['osukey'], bgdir).run()
 
 
 
