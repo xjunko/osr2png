@@ -7,4 +7,4 @@
 ### this is how it looks btw
 ![ae](data/prev.png)
 
-shit, the bg alpha is fucked, oh well... fix soontm
+~shit, the bg alpha is fucked, oh well... fix soontm~
