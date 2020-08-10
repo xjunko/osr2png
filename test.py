@@ -15,7 +15,7 @@ if not os.path.isdir('data'):
 jsonStuff = json.loads(open('settings.json').read())
 
 osupath = jsonStuff['osudir']
-replayFile = 'replays/1.osr'
+replayFile = 'replays/2.osr'
 
 # read osu stuff
 beatmap = find_beatmap(replayFile, osupath)

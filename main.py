@@ -1,7 +1,6 @@
 from PIL import Image, ImageDraw, ImageFont
 import pyttanko as osu
 import requests, subprocess
-from Utils.runoppai import runOppai
 
 def getMods(modsNumber): # :) this is retarded but idc i cant think of something better
     mods = {
@@ -56,6 +55,9 @@ class osr2png:
 
         self.UrlBeatmapApi = f'https://osu.ppy.sh/api/get_beatmaps?k={self.apiKey}&h='
         self.UrlUserdataApi = f'https://osu.ppy.sh/api/get_user?k={self.apiKey}&u='
+        self.ppApi = 'https://teal-second-spear.glitch.me/calc'
+
+
 
     def getUserdata(self, id):
         try:
@@ -80,16 +82,29 @@ class osr2png:
         # mod fix for new osrparse - idk how to read enums so ill use this
         for x in self.replay.mod_combination:
             mods += x.value
+        self.replay.mod_combination = mods
 
         self.mods = getMods(mods)
 
 
         # pee pee calculation
         self.acc = (((self.replay.number_300s)*300+(self.replay.number_100s)*100+(self.replay.number_50s)*50+(self.replay.misses)*0)/((self.replay.number_300s+self.replay.number_100s+self.replay.number_50s+self.replay.misses)*300))*100
-        command = f'oppai.exe "{self.mapDir}" {self.acc}% {self.mods} {self.replay.max_combo}x {self.replay.misses}xm -ojson'
-        test = runOppai(command)
-        self.pp = self.roundString(test[0],2)
-        self.starmodded = self.roundString(test[1],2)
+        self.__get_pp__()
+
+
+
+    def __get_pp__(self):
+        try:
+            self.pp = requests.get(f'{self.ppApi}', params={
+                'id': self.mapData[1]['beatmap_id'],
+                'acc' : self.acc,
+                'combo' : self.replay.max_combo,
+                'mods' : self.replay.mod_combination
+            }).json()
+
+        except: 
+            return None
+            raise RuntimeError('Failed to get pp')
 
         
 
@@ -165,9 +180,9 @@ class osr2png:
         # diff name
         self.drawText(self.mapData[1]['version'], yoffset=400)
         # pee pee
-        self.drawText(f'{self.pp}pp', xoffset=120, yoffset=-60)
+        self.drawText(f'{self.pp["pp"]}pp', xoffset=120, yoffset=-60)
         # star rating
-        star = self.drawText(f'{self.starmodded}', xoffset=120, yoffset=100)
+        star = self.drawText(f'{self.pp["stats"]["star"]}', xoffset=120, yoffset=100)
         # star logo thing
         self.bg['base'].paste(self.bg['star'], ( round(star[1][0]+star[0][0]+5), round(star[1][1])), mask=self.bg['star'])
         # acc
@@ -178,8 +193,8 @@ class osr2png:
 
     def __save__(self):
         mapTitle = self.mapData[0].info['Metadata'].split('\n')[0]
-        self.bg['base'] = self.bg['base'].convert('RGB')
-        self.bg['base'].save(f"[{self.mods}]{self.replay.player_name} on {self.mapData[1]['song_title']} [{self.mapData[1]['version']}].jpg")
+        self.bg['base'] = self.bg['base'].convert('RGBA')
+        self.bg['base'].save(f"[{self.mods}]{self.replay.player_name} on {self.mapData[1]['song_title']} [{self.mapData[1]['version']}].png")
 
 
 
