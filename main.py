@@ -114,6 +114,9 @@ class osr2png:
         self.font = ImageFont.truetype('data/font.ttf', size=55) # font
         self.imageDraw = ImageDraw.Draw(self.bg['base']) # text thing
 
+        # thx uyitroa again
+        blackoverlay = Image.new("RGBA", (self.width, self.height), (0, 0, 0, 128))
+
 
         # load bg
         mapBG = Image.open(self.mapBG).convert('RGBA')
@@ -124,10 +127,11 @@ class osr2png:
         height *= sizeMultiplier
         # resize to fit screen
         mapBG = mapBG.resize((round(width), round(height)))
-        mapBG.putalpha(128)
 
         # yes
         self.bg['mapBG'] = mapBG
+        # shouldve done this
+        self.bg['mapBG'].paste(blackoverlay, (0,0), mask=blackoverlay)
 
         # load avatar
         self.bg['avatar'] = Image.open(self.avatar).convert('RGBA').resize((self.bg['pfpsize'], self.bg['pfpsize']))
@@ -170,6 +174,7 @@ class osr2png:
     def __join_image__(self):
         # bg
         self.bg['base'].paste(self.bg['mapBG'])
+        
         # border
         self.bg['base'].paste(self.bg['border'], (round((self.width-self.bg['borderX'])/2), round((self.height-self.bg['borderY'])/2)))
         # avatar
@@ -193,7 +198,7 @@ class osr2png:
 
     def __save__(self):
         mapTitle = self.mapData[0].info['Metadata'].split('\n')[0]
-        self.bg['base'] = self.bg['base'].convert('RGBA')
+        self.bg['base'] = self.bg['base'].convert('RGB')
         self.bg['base'].save(f"[{self.mods}]{self.replay.player_name} on {self.mapData[1]['song_title']} [{self.mapData[1]['version']}].png")
 
 
