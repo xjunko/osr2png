@@ -2,6 +2,7 @@
 A program that converts osu! replay file into thumbnail.
 
 ## Preview
+![ae](data/bad.png)
 ![ae](data/prev.png)
 
 ## Requirements
