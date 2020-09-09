@@ -1,29 +1,6 @@
 from PIL import Image, ImageDraw, ImageFont
 import requests, subprocess, re
 
-def getMods(modsNumber): # :) this is retarded but idc i cant think of something better
-    mods = {
-        0 : 'NM',
-        1 : 'NF',
-        2 : 'EZ',
-        4 : 'TD',
-        8 : 'HD',
-        16 : 'HR',
-        24 : 'HDHR',
-        64 : 'DT',
-        72 : 'HDDT',
-        88 : 'HDHRDT',
-        128 : 'RX',
-        1024 : 'FL',
-        256 : 'HT'
-    }
-    try:
-        return '+' + mods[modsNumber]
-    except:
-        return '+NM'
-
-
-
 class osr2png:
     def __init__(self, replay, apikey, mapdata, osufiledir, mapbg=None, outdir='data/', thumbnaildir='', redl=False):
         self.replay = replay
@@ -49,7 +26,6 @@ class osr2png:
         self.userData = None
         self.acc = 0
         self.pp = None
-        self.mods = None
         self.starmodded = None
         self.wgetargs = '' if redl else '-nc'
 
@@ -94,7 +70,6 @@ class osr2png:
             mods += x.value
         self.replay.mod_combination = mods
 
-        self.mods = getMods(mods)
 
 
         # pee pee calculation
