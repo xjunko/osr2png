@@ -1,33 +1,10 @@
-# osr2png
-A program that converts osu! replay file into thumbnail.
+### ye pil rewrite, ~this will take 5 years to complete~ done.
 
-## Intro
-Created this because I want to learn pygame, it's bad.
+### credit to uyitroa for the osuparser.py and find_beatmap.py.
 
+#### i will refactor the code again, not sure when.
 
-## Requirements
-* wget in your enviroment path
-* requests
-* pygame (PIL rewrite soontm)
-* osrparse
+### this is how it looks btw
+![ae](data/prev.png)
 
-## How to use
-Insert your osu! api key in the settings.json, then run the `runner.py` or run the `runner.py` in cmd with replay directory.
-
-
-## How to use it in your own script
-Import osr2png.ReplayThumbnail class then give it
-* Replay File (.osr)
-* osu! api key
-* Force Download (Optional, only use it when the downloaded image changed such as profile picture)
-
-## Faq
-> Why you didnt use osu! files to get the background, etc?
-* soontm when I come back after my cbt session
-> What the fuck is that pp api in the osr2png.py?
-* Lazy to download the .osu file and just lazy. Might add local pp calculator.
-> It's shit
-* :sunglasses:
-> Why pygame?
-* me brain smooth so cant do hard stuff
-
+~shit, the bg alpha is fucked, oh well... fix soontm~
