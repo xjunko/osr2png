@@ -2,7 +2,7 @@
 from Utils.find_beatmap import find_beatmap_ as find_beatmap
 from Utils.osuparser import Beatmap, read_file
 from osrparse import parse_replay_file
-from main import osr2png
+from osr2png import osr2png
 import os, json, glob
 
 # gui stuff
