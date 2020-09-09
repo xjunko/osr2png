@@ -1,10 +1,11 @@
-### ye pil rewrite, ~this will take 5 years to complete~ done.
+# osr2png
+A program that converts osu! replay file into thumbnail.
 
-### credit to uyitroa for the osuparser.py and find_beatmap.py.
+## Requirements
+* requests
+* Pillow
+* osrparse
+* gooey
 
-#### i will refactor the code again, not sure when.
-
-### this is how it looks btw
-![ae](data/prev.png)
-
-~shit, the bg alpha is fucked, oh well... fix soontm~
+## How to use
+Run the runner_gui.py (or the app.exe if you're using the exe version) to generate `settings.json`, then insert your `osu! api key` and `osu! directory` into the `settings.json`.
