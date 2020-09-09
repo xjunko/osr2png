@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw, ImageFont
 import pyttanko as osu
-import requests, subprocess
+import requests, subprocess, re
 
 def getMods(modsNumber): # :) this is retarded but idc i cant think of something better
     mods = {
@@ -21,16 +21,17 @@ def getMods(modsNumber): # :) this is retarded but idc i cant think of something
     try:
         return '+' + mods[modsNumber]
     except:
-        return 
+        return '+NM'
 
 
 
 class osr2png:
-    def __init__(self, replay, apikey, mapdata, osufiledir, mapbg=None, outdir='data/', redl=False):
+    def __init__(self, replay, apikey, mapdata, osufiledir, mapbg=None, outdir='data/', thumbnaildir='', redl=False):
         self.replay = replay
         self.apiKey = apikey
         self.reDL = redl
         self.outDir = outdir
+        self.thumbnailDir = thumbnaildir
         self.mapDir = osufiledir
 
         # image stuff
@@ -56,6 +57,12 @@ class osr2png:
         self.UrlBeatmapApi = f'https://osu.ppy.sh/api/get_beatmaps?k={self.apiKey}&h='
         self.UrlUserdataApi = f'https://osu.ppy.sh/api/get_user?k={self.apiKey}&u='
         self.ppApi = 'https://teal-second-spear.glitch.me/calc'
+        self.ppApiCpol = 'https://pp.osuck.net/pp'
+
+        # if error
+        self.fakeUserData = {
+            'user_id':-1
+        }
 
 
 
@@ -63,11 +70,14 @@ class osr2png:
         try:
             data = requests.get(f'{self.UrlUserdataApi}{id}').json()[0]
         except Exception as e:
-            return e
+            return self.fakeUserData
         return data
 
     def get_player_pfp(self, userID):
         subprocess.call(f'wget {self.wgetargs} -O {self.outDir}{userID}.png https://a.ppy.sh/{userID}')
+
+    def run_wget(self, args):
+        subprocess.call(f'wget {self.wgetargs} {args}')
 
     def roundString(self, s: str, digits: int):
         n = round(float(s), digits)
@@ -75,7 +85,8 @@ class osr2png:
 
     def __init_replay_data__(self):
         self.userData = self.getUserdata(self.replay.player_name)
-        self.get_player_pfp(self.userData['user_id'])
+        if self.userData['user_id'] != -1:
+            self.get_player_pfp(self.userData['user_id'])
         self.avatar = f'{self.outDir}{self.userData["user_id"]}.png'
 
         mods = 0
@@ -89,7 +100,9 @@ class osr2png:
 
         # pee pee calculation
         self.acc = (((self.replay.number_300s)*300+(self.replay.number_100s)*100+(self.replay.number_50s)*50+(self.replay.misses)*0)/((self.replay.number_300s+self.replay.number_100s+self.replay.number_50s+self.replay.misses)*300))*100
-        self.__get_pp__()
+        self.__get_pp_cpol__()
+        if self.mapBG == 'data/bg.png':
+            self.__try_get_bg_online__()
 
 
 
@@ -99,12 +112,41 @@ class osr2png:
                 'id': self.mapData[1]['beatmap_id'],
                 'acc' : self.acc,
                 'combo' : self.replay.max_combo,
-                'mods' : self.replay.mod_combination
+                'mods' : self.replay.mod_combination,
+                'miss' : self.replay.misses
             }).json()
 
         except: 
             return None
             raise RuntimeError('Failed to get pp')
+
+    # wtf this shit cool holy thanks cpol
+    def __get_pp_cpol__(self):
+        params = {
+        'id': self.mapData[1]['beatmap_id'],
+        'mods': self.replay.mod_combination,
+        'combo': self.replay.max_combo,
+        'acc': self.acc,
+        'miss': self.replay.misses
+        }
+
+        try:
+            self.pp = requests.get(self.ppApiCpol, params=params).json()
+        except:
+            return None
+            raise RuntimeError('Failed to get pp')
+
+    def __try_get_bg_online__(self):
+        url = self.pp['other']['bg']['full']
+        dir = f'{self.outDir}{self.pp["id"]["diff"]}.png'
+        self.run_wget(f'-O {dir} {url}')
+
+        try:
+            imagetest = Image.open(dir).convert('RGBA')
+            self.mapBG = dir
+        except:
+            return
+
 
         
 
@@ -148,10 +190,21 @@ class osr2png:
 
 
     def drawText(self, text, color=(255,255,255), shadowcolor=(0,0,0), xoffset=0, yoffset=0, shadowoffset=5):
+        fontsize = 55
         negative = '-' in str(xoffset)
         shadowoffset = shadowoffset
-        textW, textH = self.imageDraw.textsize(text,font=self.font)
+        
         args = []
+        # limit the text to 80 words cuz when it go higher than that the word small asf
+        if len(text) > 80:
+            text = text[:80]+'...'
+
+        # resize font till it fits the canvas
+        while self.font.getsize(text)[0] > self.width-50 and fontsize > 20:
+            fontsize -= 1
+            self.font = ImageFont.truetype('data/font.ttf', size=fontsize)  # just incase i did -5
+
+        textW, textH = self.imageDraw.textsize(text,font=self.font)
 
         if xoffset and not negative:
             args.append([ (self.width-textW+textW)/2+xoffset+shadowoffset , (self.height-yoffset)/2+shadowoffset])
@@ -168,6 +221,8 @@ class osr2png:
         self.imageDraw.text(args[0], text, fill=shadowcolor, font=self.font)
         self.imageDraw.text(args[1], text, fill=color, font=self.font)
 
+        # reset back the font
+        self.font = ImageFont.truetype('data/font.ttf', size=55)
         return [textW,textH], args[1]
 
 
@@ -183,29 +238,27 @@ class osr2png:
         # map title
         self.drawText(f"{self.mapData[1]['artist_name']} - {self.mapData[1]['song_title']}", yoffset=550)
         # diff name
-        self.drawText(self.mapData[1]['version'], yoffset=400)
+        self.drawText(f"[{self.mapData[1]['version']}]", yoffset=400)
         # pee pee
-        self.drawText(f'{self.pp["pp"]}pp', xoffset=120, yoffset=-60)
+        self.drawText(f'{self.pp["pp"]["current"]}pp', xoffset=120, yoffset=-60)
         # star rating
-        star = self.drawText(f'{self.pp["stats"]["star"]}', xoffset=120, yoffset=100)
+        star = self.drawText(f'{self.pp["stats"]["star"]["pure"]}', xoffset=120, yoffset=100)
         # star logo thing
         self.bg['base'].paste(self.bg['star'], ( round(star[1][0]+star[0][0]+5), round(star[1][1])), mask=self.bg['star'])
         # acc
         self.drawText(f'{self.roundString(self.acc, 2)}%',xoffset=-120, yoffset=100)
         # mods
-        self.drawText(f'{self.mods}', xoffset=-120, yoffset=-60)
+        self.drawText(f'{self.pp["mods"]["name"]}', xoffset=-120, yoffset=-60)
 
 
     def __save__(self):
         mapTitle = self.mapData[0].info['Metadata'].split('\n')[0]
+        dir = f"{self.thumbnailDir}[{self.pp['mods']['name']}]{self.replay.player_name} on {self.mapData[1]['song_title']} [{self.mapData[1]['version']}].png"
+        dir = re.sub(r'[\\*?:"<>|]',"",dir)
         self.bg['base'] = self.bg['base'].convert('RGB')
-        self.bg['base'].save(f"[{self.mods}]{self.replay.player_name} on {self.mapData[1]['song_title']} [{self.mapData[1]['version']}].png")
+        self.bg['base'].save(dir)
 
-
-
-
-
-
+        return dir
 
     def run(self):
         self.__init_replay_data__()
@@ -214,7 +267,7 @@ class osr2png:
 
 
         # ae
-        self.__save__()
+        return self.__save__()
         
 
 
