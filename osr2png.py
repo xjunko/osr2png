@@ -135,7 +135,12 @@ class osr2png:
 
 
         # load bg
-        mapBG = Image.open(self.mapBG).convert('RGBA')
+        try:
+            mapBG = Image.open(self.mapBG).convert('RGBA')
+        except:
+            self.__try_get_bg_online__()
+            mapBG = Image.open(self.mapBG).convert('RGBA')
+
         width, height = mapBG.size
         # get size
         sizeMultiplier = self.width/width
@@ -227,8 +232,12 @@ class osr2png:
 
     def __save__(self):
         mapTitle = self.mapData[0].info['Metadata'].split('\n')[0]
+        # lol
+        self.mapData[1]['song_title'] = re.sub(r'[\\*?:"<>|]',"",self.mapData[1]['song_title'])
+        self.mapData[1]['version'] = re.sub(r'[\\*?:"<>|]',"",self.mapData[1]['version'])
+
         dir = f"{self.thumbnailDir}[{self.pp['mods']['name']}]{self.replay.player_name} on {self.mapData[1]['song_title']} [{self.mapData[1]['version']}].png"
-        dir = re.sub(r'[\\*?:"<>|]',"",dir)
+        
         self.bg['base'] = self.bg['base'].convert('RGB')
         self.bg['base'].save(dir)
 
