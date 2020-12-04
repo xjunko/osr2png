@@ -14,7 +14,7 @@ You can use fonts from Google Fonts like Fredoka, Padauk, etc... Which is free f
 * requests
 * Pillow
 * osrparse
-* gooey
+* PyEasyGUi
 
 ## How to use
 Run the runner_gui.py (or the app.exe if you're using the exe version) to generate `settings.json`, then insert your `osu! api key` and `osu! directory` into the `settings.json`.
