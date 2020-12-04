@@ -1,8 +1,12 @@
 # osr2png
 A program that converts osu! replay file into thumbnail.
 
+## Disclaimer 
+This application uses Nanami Rounded (Font), which is not suitable for monetized video. (Free for personal use only)
+You can use fonts from Google Fonts like Fredoka, Padauk, etc... Which is free for commercial use.
+
+
 ## Preview
-yes i know 
 ![ae](data/bad.png)
 ![ae](data/prev.png)
 
