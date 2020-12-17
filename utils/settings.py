@@ -1,3 +1,5 @@
+
+
 from objects import glob
 
 from . import getSizeMultiplier
@@ -16,5 +18,7 @@ class Settings:
 
         self.avatar = kwargs.get('avatar', 'res/default_avatar.png')
 
-        self.resolution = glob.config.resolution
+        self.resolution = [int(x) for x in glob.config.resolution.split(',')]
         self.sizeMultiplier = getSizeMultiplier(self.resolution[1])
+
+
