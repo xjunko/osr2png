@@ -1,4 +1,5 @@
-
+import json
+from types import SimpleNamespace
 
 def getSizeMultiplier(height):
     return height/720
@@ -10,3 +11,8 @@ def getSizeMultiplier_(pixel: int):
 
 
 
+def loadConfig():
+    with open('config.json') as file:
+        res = json.loads(file.read(), object_hook=lambda d: SimpleNamespace(**d))
+
+    return res
