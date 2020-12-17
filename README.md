@@ -5,7 +5,7 @@ basically a better version of osr2png
 * support custom resolution 
 * no more osu.db bullshit, get everything online
 * class based (?) so its easier to add stuff 
-* async support but uses sync by default
+* async support but uses sync by default (pysimplegui didnt support async, it does but its fucking pain to make it work (probably, doesnt try))
 * basically 69420 times easier to use than whatever tf the old code was
 * insert more
 
