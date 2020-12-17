@@ -1,1 +1,3 @@
-import config
+from utils import loadConfig
+
+config = loadConfig()

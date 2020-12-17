@@ -17,6 +17,8 @@ img/
 thumbnail/
 config.py
 config.json
+out/
+cache/
 
 # Distribution / packaging
 .Python
