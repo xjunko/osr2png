@@ -16,3 +16,10 @@ def loadConfig():
         res = json.loads(file.read(), object_hook=lambda d: SimpleNamespace(**d))
 
     return res
+
+
+def saveConfig(settings):
+    with open('config.json', 'w') as f:
+        f.write(json.dumps(settings.__dict__, indent=4))
+
+    print('Config Saved!')
