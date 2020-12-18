@@ -23,7 +23,7 @@ layout = [
 
             [sg.Text('Replay File')],
             [sg.Input(settings.lastreplay, key=Event.replaydir), sg.FilesBrowse(target=(8, 0))],
-            [sg.Input(size=(100,250))],
+            #[sg.Input(size=(100,250))],
 
             [sg.Button('Render', key=Event.render), sg.Button('Close', key=Event.close)],
 
