@@ -18,7 +18,7 @@ class Settings:
 
         self.avatar = kwargs.get('avatar', 'res/default_avatar.png')
 
-        self.resolution = [int(x) for x in glob.config.resolution.split(',')]
+        self.resolution = [float(x) for x in glob.config.resolution.split(',')]
         self.sizeMultiplier = getSizeMultiplier(self.resolution[1])
 
 
