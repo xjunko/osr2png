@@ -37,7 +37,7 @@ async def main(replay: str = 'test.osr'):
 
 
 class osr2png:
-    def __init__(self, replay: str):
+    def __init__(self, replay: str, **kwargs):
         self.replay = open_replay(replay)
         self.userID = api._getUserID(self.replay.player_name)
         self.beatmapsetID, self.beatmapID, self.mapData = api._getMapID(self.replay.map_md5)
@@ -57,18 +57,20 @@ class osr2png:
 
         self.settings.pp = api._getPP(self.settings)
 
+        self.outdir = kwargs.get('outdir', 'out')
+
     def generate(self):
         img = Image(self.settings)
 
         res = img.generate()
 
         res = res.convert('RGB') # heh
-        res.save(f'out/{self.beatmapID}.png')
+        res.save(f'{self.outdir}/{self.beatmapID}.png')
 
 
 
-m = osr2png('test2.osr')
-m.generate()
+#m = osr2png('test2.osr')
+#m.generate()
 
 
 
