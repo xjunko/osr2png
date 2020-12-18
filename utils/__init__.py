@@ -2,7 +2,7 @@ import json
 from types import SimpleNamespace
 
 def getSizeMultiplier(height):
-    return height/720
+    return height/720 # HOW IS THIS WORKING
 
 def getSizeMultiplier_(pixel: int):
     ''' this is retarded how tf am i supposed to calc resize shit '''
