@@ -3,26 +3,27 @@ import PySimpleGUI as sg
 from main import osr2png
 from utils import loadConfig, saveConfig
 from objects.enums import Event
+from objects import glob
 
 sg.theme('DarkBlack')
-settings = loadConfig()
+glob.config = loadConfig()
 
 layout = [
             [sg.Text('osu! api key:')],
-            [sg.Input(settings.apikey, key=Event.osukey)],
+            [sg.Input(glob.config.apikey, key=Event.osukey)],
 
             [sg.Text('Output path:')],
-            [sg.Input(settings.outdir, key=Event.outdir), sg.FolderBrowse(target=(3, -2))],
+            [sg.Input(glob.config.outdir, key=Event.outdir), sg.FolderBrowse(target=(3, -2))],
 
             [sg.Text('Resolution: (Width, Height)')],
-            [sg.Input(settings.resolution, key=Event.resolution)],
+            [sg.Input(glob.config.resolution, key=Event.resolution)],
 
-            [sg.Checkbox("customBG", key=Event.custombg, default=settings.customBG), sg.Checkbox("customOverlay", key=Event.customoverlay, default=settings.customOverlay)],
+            [sg.Checkbox("customBG", key=Event.custombg, default=glob.config.customBG), sg.Checkbox("customOverlay", key=Event.customoverlay, default=glob.config.customOverlay)],
 
             [sg.Button('Save Setting', key=Event.save)],
 
             [sg.Text('Replay File')],
-            [sg.Input(settings.lastreplay, key=Event.replaydir), sg.FilesBrowse(target=(8, 0))],
+            [sg.Input(glob.config.lastreplay, key=Event.replaydir), sg.FilesBrowse(target=(9, 0))],
             #[sg.Input(size=(100,250))],
 
             [sg.Button('Render', key=Event.render), sg.Button('Close', key=Event.close)],
@@ -39,6 +40,14 @@ while True:
     if event == sg.WIN_CLOSED or event == Event.close:
         break
 
+    if event == Event.save:
+        glob.config.outdir = value[Event.outdir]
+        glob.config.lastreplay = value[Event.replaydir]
+        glob.config.resolution = value[Event.resolution]
+        glob.config.customBG = value[Event.custombg]
+        glob.config.customOverlay = value[Event.customoverlay]
+        saveConfig(glob.config)
+
     if event == Event.render:
         if not value[Event.replaydir] or not value[Event.replaydir].endswith('.osr'):
             print('No replay given!')
@@ -52,13 +61,13 @@ while True:
         print('done?')
 
         # save shit to settings
-        settings.outdir = value[Event.outdir]
-        settings.lastreplay = value[Event.replaydir]
-        settings.resolution = value[Event.resolution]
-        settings.customBG = value[Event.custombg]
-        settings.customOverlay = value[Event.customoverlay]
+        glob.config.outdir = value[Event.outdir]
+        glob.config.lastreplay = value[Event.replaydir]
+        glob.config.resolution = value[Event.resolution]
+        glob.config.customBG = value[Event.custombg]
+        glob.config.customOverlay = value[Event.customoverlay]
 
-        saveConfig(settings)
+        saveConfig(glob.config)
 
 
 window.close()

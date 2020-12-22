@@ -8,7 +8,7 @@ class Template:
 
         self.loadImage()
         self.addToImage()
-        print(f'{self.__name__} added!')
+        print(f'x is added! (broken lol)')
 
     def loadImage(self):
         pass
