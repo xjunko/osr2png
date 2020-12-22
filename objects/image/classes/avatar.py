@@ -13,7 +13,7 @@ class Avatar(Template):
 
     def loadImage(self):
         borderColor = (220,220,220)
-        print(self.settings.sizeMultiplier)
+        #print(self.settings.sizeMultiplier)
 
         # resize image
         size, borderSize = int(200*self.settings.sizeMultiplier), int(205*self.settings.sizeMultiplier)
