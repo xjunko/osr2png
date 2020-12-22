@@ -15,7 +15,6 @@ class Overlay(Template):
 
 
     def addToImage(self):
-        print(glob.config)
         if not glob.config.customOverlay:
             return
         self.img.paste(self.overlay, mask=self.overlay)
