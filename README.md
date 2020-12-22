@@ -1,6 +1,9 @@
 # osr2png - rewrite
 basically a better version of osr2png
 
+## also 
+* create `cache` and `out` folder lol, ill fix it soontm
+
 ## what's new in this version
 * support custom resolution 
 * no more osu.db bullshit, get everything online
@@ -12,3 +15,4 @@ basically a better version of osr2png
 ## How does it look
 basically the same - (2560, 1080)
 ![ee](res/sample.png)
+
