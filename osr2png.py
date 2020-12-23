@@ -1,10 +1,11 @@
-import asyncio
+import asyncio, re, os
 
 from utils.replay import open_replay
 from utils.settings import Settings
 from utils import api
 
 from objects.image import Image
+from objects import glob
 
 
 async def main(replay: str = 'test.osr'):
@@ -36,6 +37,8 @@ async def main(replay: str = 'test.osr'):
     _img.save(f'out/{_bmID}.png')
 
 
+safeFilename = re.compile(r'[\\*?:"<>|]')
+
 class osr2png:
     def __init__(self, replay: str, **kwargs):
         self.replay = open_replay(replay)
@@ -57,15 +60,17 @@ class osr2png:
 
         self.settings.pp = api._getPP(self.settings)
 
-        self.outdir = kwargs.get('outdir', 'out')
+        self.outdir = kwargs.get('outdir', glob.config.outdir) # abit stupid i know
 
     def generate(self):
         img = Image(self.settings)
-
         res = img.generate()
+        filename = f"[{self.settings.pp['mods']['name']}]{self.replay.player_name} on {self.mapData['title']} {self.mapData['version']}"
+        # make filename safe
+        filename = safeFilename.sub("", filename)
 
-        res = res.convert('RGB') # heh
-        res.save(f'{self.outdir}/{self.beatmapID}.png')
+        res = res.convert('RGB') # convert to rgb else opacity fucked
+        res.save(os.path.join(glob.config.outdir, filename + '.png'))
 
 
 
