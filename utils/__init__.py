@@ -1,4 +1,4 @@
-import json
+import json, os
 from types import SimpleNamespace
 
 def getSizeMultiplier(height):
