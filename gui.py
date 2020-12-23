@@ -1,43 +1,74 @@
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
-from qasync import QEventLoop, asyncSlot
+import PySimpleGUI as sg
 
-import sys, asyncio
+from osr2png import osr2png
+from utils import loadConfig, saveConfig, checkFolder
+from objects.enums import Event
+from objects import glob
 
+sg.theme('DarkBlack')
+glob.config = loadConfig()
+checkFolder(glob.config)
 
-class Ui(QtWidgets.QMainWindow):
-    def __init__(self, parent=None):
-        super().__init__(parent)
+layout = [
+            [sg.Text('osu! api key:')],
+            [sg.Input(glob.config.apikey, key=Event.osukey)],
 
-        self.setWindowTitle("meme")
-        self.windowwidth = self.default_width = 700
-        self.windowheight = self.default_height = 600
-        self.setFixedSize(QtCore.QSize(self.windowwidth, self.windowheight))
-        self.setStyleSheet("background-color: rgb(30, 30, 33);")
+            [sg.Text('Output path:')],
+            [sg.Input(glob.config.outdir, key=Event.outdir), sg.FolderBrowse(target=(3, -2))],
 
-        self.label = QtWidgets.QLabel(self)
-        self.label.setGeometry(0, 0, 700, 300)
-        self.label.setPixmap(QtGui.QPixmap('res/sample.png').scaled(700, 300, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
+            [sg.Text('Resolution: (Width, Height)')],
+            [sg.Input(glob.config.resolution, key=Event.resolution)],
 
-        # ...
-        self.settingsLabel = QtWidgets.QLabel(self)
-        self.settingsLabel.setText('eajdodn')
+            [sg.Checkbox("customBG", key=Event.custombg, default=glob.config.customBG), sg.Checkbox("customOverlay", key=Event.customoverlay, default=glob.config.customOverlay)],
 
-        self.show()
+            [sg.Button('Save Setting', key=Event.save)],
 
+            [sg.Text('Replay File')],
+            [sg.Input(glob.config.lastreplay, key=Event.replaydir), sg.FilesBrowse(target=(9, 0))],
+            #[sg.Input(size=(100,250))],
 
+            [sg.Button('Render', key=Event.render), sg.Button('Close', key=Event.close)],
 
+            [sg.Output(size=(64,10))],
 
-def main():
-    app = QtWidgets.QApplication(sys.argv)
-    loop = QEventLoop(app)
-    asyncio.set_event_loop(loop)
-
-    tiddies = Ui()
-    tiddies.show()
+         ]
 
 
-    loop.run_forever()
+window = sg.Window("fuck", layout)
 
 
-if __name__ == '__main__':
-    main()
+def saveConfigGui():
+    glob.config.outdir = value[Event.outdir]
+    glob.config.lastreplay = value[Event.replaydir]
+    glob.config.resolution = value[Event.resolution]
+    glob.config.customBG = value[Event.custombg]
+    glob.config.customOverlay = value[Event.customoverlay]
+    saveConfig(glob.config)
+
+while True:
+    event, value = window.read(timeout=300)
+    if event == sg.WIN_CLOSED or event == Event.close:
+        break
+
+    if event == Event.save:
+        saveConfigGui()
+        
+
+    if event == Event.render:
+        if not value[Event.replaydir] or not value[Event.replaydir].endswith('.osr'):
+            print('No replay given!')
+            continue
+        if len(value[Event.osukey]) < 40:
+            print('Invalid osu!api key!')
+            continue
+
+        # save shit to settings
+        saveConfigGui()
+
+        app = osr2png(value[Event.replaydir])
+        app.generate()
+        print('done?')
+
+
+
+window.close()
