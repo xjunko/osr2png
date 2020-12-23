@@ -23,3 +23,10 @@ def saveConfig(settings):
         f.write(json.dumps(settings.__dict__, indent=4))
 
     print('Config Saved!')
+
+
+def checkFolder(settings):
+    if not os.path.isdir(settings.outdir):
+        os.mkdir(settings.outdir)
+    if not os.path.isdir('cache'):
+        os.mkdir('cache')
