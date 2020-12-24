@@ -1,0 +1,10 @@
+
+{
+	"apikey": "",
+	"outdir": "out",
+	"resolution": "1920,1080",
+	"customBG": false,
+	"customOverlay": false,
+	"debug": false,
+	"lastreplay": null
+}

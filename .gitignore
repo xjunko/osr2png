@@ -15,6 +15,12 @@ settings.json
 img/*
 img/
 thumbnail/
+config.py
+config.json
+out/
+cache/
+
+logs/
 
 # Distribution / packaging
 .Python
