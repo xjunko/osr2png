@@ -15,3 +15,5 @@ You can use fonts from Google Fonts like Fredoka, Padauk, etc... Which is free f
 ## Preview
 ![ee](res/sample.png)
 
+## Contact
+Discord: FireRedz#5223
