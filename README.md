@@ -14,7 +14,6 @@ You can use fonts from Google Fonts like Fredoka, Padauk, etc... Which is free f
 
 
 ## Preview
-![ae](data/bad.png)
 ![ee](res/sample.png)
 
 ## Requirements
