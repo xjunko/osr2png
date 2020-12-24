@@ -56,6 +56,7 @@ def saveConfigGui(value):
     glob.config.resolution = value[Event.resolution]
     glob.config.customBG = value[Event.custombg]
     glob.config.customOverlay = value[Event.customoverlay]
+    glob.config.apikey = value[Event.osukey]
     saveConfig(glob.config)
 
 @logged(logger)
