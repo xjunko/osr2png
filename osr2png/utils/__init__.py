@@ -1,5 +1,9 @@
 import json, os
 from types import SimpleNamespace
+from shutil import copyfile
+
+import logging, sys
+from autologging import logged, TRACE, traced
 
 def getSizeMultiplier(height):
     return height/720 # HOW IS THIS WORKING
@@ -10,10 +14,16 @@ def getSizeMultiplier_(pixel: int):
     return (pixel/defaultPixel)*1
 
 
-
+@logged
+@traced
 def loadConfig():
     if not os.path.isfile('config.json'):
-        raise Exception('No config found!')
+        print('no config found!')
+
+        copyfile('res/config.sample.json', 'config.json')
+
+
+
     with open('config.json') as file:
         res = json.loads(file.read(), object_hook=lambda d: SimpleNamespace(**d))
 
