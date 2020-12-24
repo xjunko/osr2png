@@ -2,14 +2,25 @@
 basically a better version of osr2png
 
 ## what's new in this version
-* support custom resolution 
+* support custom resolution
 * no more osu.db bullshit, get everything online
-* class based (?) so its easier to add stuff 
-* async support but uses sync by default (pysimplegui didnt support async, it does but its fucking pain to make it work (probably, doesnt try))
-* basically 69420 times easier to use than whatever tf the old code was
+* class based (?) so its easier to add stuff
 * insert more
 
-## How does it look
-basically the same - (2560, 1080)
+=======
+## Disclaimer 
+This application uses Nanami Rounded (Font), which is not suitable for monetized video. (Free for personal use only)</br>
+You can use fonts from Google Fonts like Fredoka, Padauk, etc... Which is free for commercial use.
+
+
+## Preview
+![ae](data/bad.png)
 ![ee](res/sample.png)
+
+## Requirements
+* requests
+* Pillow
+* osrparse
+* PyEasyGUi
+
 
