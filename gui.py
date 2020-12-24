@@ -33,7 +33,7 @@ layout = [
 
             [sg.Button('Render', key=Event.render), sg.Button('Close', key=Event.close)],
 
-            #[sg.Output(size=(64,10))],
+            [sg.Output(size=(64,10))],
 
          ]
 
