@@ -20,6 +20,8 @@ config.json
 out/
 cache/
 
+logs/
+
 # Distribution / packaging
 .Python
 build/

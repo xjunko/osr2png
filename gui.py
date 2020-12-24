@@ -1,9 +1,13 @@
 import PySimpleGUI as sg
 
-from osr2png import osr2png
-from utils import loadConfig, saveConfig, checkFolder
-from objects.enums import Event
-from objects import glob
+from osr2png import osr2png, logger # what the fuck
+from osr2png.utils import loadConfig, saveConfig, checkFolder
+from osr2png.objects.enums import Event
+from osr2png.objects import glob
+
+# logging shit
+import logging, sys
+from autologging import logged, TRACE, traced
 
 sg.theme('DarkBlack')
 glob.config = loadConfig()
@@ -29,15 +33,17 @@ layout = [
 
             [sg.Button('Render', key=Event.render), sg.Button('Close', key=Event.close)],
 
-            [sg.Output(size=(64,10))],
+            #[sg.Output(size=(64,10))],
 
          ]
 
 
 window = sg.Window("fuck", layout)
 
-
-def saveConfigGui():
+#@logged(logger)
+#@traced
+# lol dont log this
+def saveConfigGui(value):
     glob.config.outdir = value[Event.outdir]
     glob.config.lastreplay = value[Event.replaydir]
     glob.config.resolution = value[Event.resolution]
@@ -45,30 +51,42 @@ def saveConfigGui():
     glob.config.customOverlay = value[Event.customoverlay]
     saveConfig(glob.config)
 
-while True:
-    event, value = window.read(timeout=300)
-    if event == sg.WIN_CLOSED or event == Event.close:
-        break
+@logged(logger)
+@traced
+def main():
+    value = []
+    event = None
+    while True:
+        event, value = window.read(timeout=300)
+        if event == sg.WIN_CLOSED or event == Event.close:
+            break
 
-    if event == Event.save:
-        saveConfigGui()
-        
+        if event == Event.save:
+            saveConfigGui(value)
+            
 
-    if event == Event.render:
-        if not value[Event.replaydir] or not value[Event.replaydir].endswith('.osr'):
-            print('No replay given!')
-            continue
-        if len(value[Event.osukey]) < 40:
-            print('Invalid osu!api key!')
-            continue
+        if event == Event.render:
+            if not value[Event.replaydir] or not value[Event.replaydir].endswith('.osr'):
+                print('No replay given!')
+                continue
+            if len(value[Event.osukey]) < 40:
+                print('Invalid osu!api key!')
+                continue
 
-        # save shit to settings
-        saveConfigGui()
+            # save shit to settings
+            saveConfigGui(value)
 
-        app = osr2png(value[Event.replaydir])
-        app.generate()
-        print('done?')
+            app = osr2png(value[Event.replaydir])
+            app.generate()
+            print('done?')
 
 
 
-window.close()
+
+if __name__ == '__main__':
+    logging.basicConfig(level=TRACE,
+                        filename='logs.log',
+                        filemode="w",
+                        format="%(levelname)s:%(filename)s,%(lineno)d:%(name)s.%(funcName)s:%(message)s")
+    main()
+    window.close()
