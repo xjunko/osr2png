@@ -7,7 +7,6 @@ basically a better version of osr2png
 * class based (?) so its easier to add stuff
 * insert more
 
-=======
 ## Disclaimer 
 This application uses Nanami Rounded (Font), which is not suitable for monetized video. (Free for personal use only)</br>
 You can use fonts from Google Fonts like Fredoka, Padauk, etc... Which is free for commercial use.
