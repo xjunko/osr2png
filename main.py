@@ -129,4 +129,4 @@ if __name__ == "__main__":
 
     # real shit
     app = osr2png(replay_path=args.replay, ignore_updates=args.ignore_update)
-    # app.generate()
+    app.generate()
