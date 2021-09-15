@@ -1,0 +1,1 @@
+You can put your own `background.png` and `overlay.png` overlay here. Where is it placed in the image should be self explanatory.

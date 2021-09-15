@@ -1,6 +1,0 @@
-aiohttp
-Pillow
-PySimpleGUI
-requests
-autologging
-logger
