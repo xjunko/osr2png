@@ -3,6 +3,7 @@
     THE MOTHERFUCKING OSU API 
 
 """
+import os
 import requests
 from pathlib import Path
 from PIL import Image
@@ -23,7 +24,13 @@ class osuAPI:
 
         #
         print(f"[osuAPI] Started, apikey is {token[:10]}... [Length: {len(token)}]!")
+        self.check_api_shit()
         self.make_sure_folder_created()
+
+    def check_api_shit(self) -> None:
+        if len(self.token) < 40:
+            print("[osuAPI] Invalid api key!")
+            os._exit(1)
 
     def make_sure_folder_created(self) -> None:
         for required in [CACHE_FOLDER, ASSETS_FOLDER]:

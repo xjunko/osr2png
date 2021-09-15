@@ -4,6 +4,7 @@
     imagine importing someone else replay lib
 
 """
+import os
 from pathlib import Path
 from enum import IntEnum
 from dataclasses import dataclass
@@ -59,7 +60,8 @@ class Replay:
     @classmethod
     def from_file(cls: object, filepath: str) -> object:
         if not (path := Path(filepath)).exists():
-            return
+            print("[Replay] File did not exists, exiting!")
+            os._exit(1)
 
         replay = cls()
         replay.view = memoryview(path.read_bytes())
