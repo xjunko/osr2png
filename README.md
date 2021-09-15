@@ -21,6 +21,7 @@ You can use other coolass fonts from Google Font [Fredoka, Padauk, etc...] which
 ## Preview
 ![](assets/good_fucking_score.png)
 ![](assets/mou_ii_kai.png)
+![nity](https://cdn.discordapp.com/attachments/703552229680087042/887676604111781949/Maison_book_girl_-_faithlessness_stixys_hard_Honoka-Chan_HDDT.png)
 
 ## Contact
 Discord: FireRedz#7765
