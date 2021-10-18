@@ -2,7 +2,7 @@
 This version and onwards will not have GUI as making GUI is fucking gay</br>
 Old GUI version is still available [Here](https://github.com/FireRedz/osr2png/releases/tag/0.5)
 
-## Tutorial
+## How to use (Video)
 [![](https://cdn.discordapp.com/attachments/824281320318173286/899576514666987530/embed.png)](https://www.youtube.com/watch?v=bCHRWe5f1sk)
 
 ## what's new in this version
