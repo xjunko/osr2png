@@ -1,5 +1,4 @@
 from pathlib import Path
-from pprint import pprint
 from typing import Any, Optional
 
 from rosu_pp_py import PerformanceAttributes
@@ -37,8 +36,6 @@ class Replay2Picture:
             context=self,
             **kwargs,
         )
-
-        pprint(settings)
 
         canvas: Canvas = Canvas.from_settings(settings=settings)
 
