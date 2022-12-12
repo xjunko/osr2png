@@ -27,8 +27,14 @@ def generate(canvas: "Canvas") -> None:
     dim = Image.new(
         "RGBA",
         size=(
-            int(canvas.settings.resolution.x - canvas.settings.background_border),
-            int(canvas.settings.resolution.y - canvas.settings.background_border),
+            int(
+                canvas.settings.resolution.x
+                - (canvas.settings.background_border * canvas.settings.scale)
+            ),
+            int(
+                canvas.settings.resolution.y
+                - (canvas.settings.background_border * canvas.settings.scale)
+            ),
         ),
         color=(0, 0, 0, int(255 * canvas.settings.background_dim)),
     )
