@@ -11,6 +11,7 @@ from pathlib import Path
 
 import app.utils
 from app.gazo import Replay2Picture
+from app.generation.common import vector
 from app.version import Version
 
 #
@@ -42,11 +43,57 @@ def main(argv: list[str]) -> int:
 
     # Image Gen
     parser.add_argument(
+        "-m",
+        "--message",
+        help="[Optional] The extra text at the bottom",
+        type=str,
+        default="",
+    )
+
+    parser.add_argument(
         "-s",
         "--style",
-        help="[TODO] Style of Image | Unimplemented!",
+        help="[Todo] Style of Image | Unimplemented!",
         type=int,
         default=1,
+    )
+    parser.add_argument(
+        "-width",
+        "--width",
+        help="[Optional] The width of the image.",
+        type=int,
+        default=1920,
+    )
+    parser.add_argument(
+        "-height",
+        "--height",
+        help="[Optional] The width of the image.",
+        type=int,
+        default=1080,
+    )
+
+    parser.add_argument(
+        "-dim",
+        "--background-dim",
+        help="[Optional] The dim of beatmap background.",
+        type=float,
+        default=0.4,
+    )
+
+    parser.add_argument(
+        "-blur",
+        "--background-blur",
+        help="[Optional] The blur of beatmap background.",
+        type=float,
+        default=5,
+    )
+
+    parser.add_argument(
+        "-border",
+        "--background-border",
+        help="[Optional] The border of beatmap background's dim.",
+        type=float,
+        default=5,
     )
 
     args = parser.parse_args()
@@ -75,7 +122,14 @@ def main(argv: list[str]) -> int:
 
     # Common
     replay.calculate()
-    replay.generate(style=args.style)
+    replay.generate(
+        style=args.style,
+        resolution=vector.Vector2(x=args.width, y=args.height),  # type: ignore
+        background_blur=args.background_blur,
+        background_dim=args.background_dim,
+        background_border=args.background_border,
+        message=args.message,
+    )
 
     return 0
 

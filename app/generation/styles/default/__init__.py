@@ -26,7 +26,10 @@ def generate(canvas: "Canvas") -> None:
     # Dim
     dim = Image.new(
         "RGBA",
-        size=(canvas.settings.resolution.x - canvas.settings.background_border, canvas.settings.resolution.y - canvas.settings.background_border),  # type: ignore
+        size=(
+            int(canvas.settings.resolution.x - canvas.settings.background_border),
+            int(canvas.settings.resolution.y - canvas.settings.background_border),
+        ),
         color=(0, 0, 0, int(255 * canvas.settings.background_dim)),
     )
 

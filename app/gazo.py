@@ -1,5 +1,6 @@
 from pathlib import Path
-from typing import Optional
+from pprint import pprint
+from typing import Any, Optional
 
 from rosu_pp_py import PerformanceAttributes
 
@@ -30,10 +31,14 @@ class Replay2Picture:
 
         print(" done!")
 
-    def generate(self, style: int = 1) -> Path:
+    def generate(self, style: int = 1, **kwargs: dict[Any, Any]) -> Path:
         settings: CanvasSettings = CanvasSettings(
-            resolution=Vector2(x=1920, y=1080), style=CanvasStyle(style), context=self
+            style=CanvasStyle(style),
+            context=self,
+            **kwargs,
         )
+
+        pprint(settings)
 
         canvas: Canvas = Canvas.from_settings(settings=settings)
 
