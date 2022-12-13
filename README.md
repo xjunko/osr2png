@@ -1,4 +1,4 @@
-# osr2png [unreleased, for now, cuz i'm on linux and idk how to distribute the files to exe without doing hacky stuff]
+# osr2png - rewrite³
 
 [![GitHub release](https://img.shields.io/github/release/xjunko/osr2png.svg?style=for-the-badge&logo=appveyor)](https://github.com/xjunko/osr2png/releases/latest)
 
