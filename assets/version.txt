@@ -1,1 +1,1 @@
-0.6.1
+0.7.0|Yet another osr2png massive rewrite, please update. :D
