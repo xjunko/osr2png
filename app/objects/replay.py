@@ -56,7 +56,7 @@ class Mods(IntFlag):
 
     def __repr__(self) -> str:
         if self.value == Mods.NOMOD:
-            return ""
+            return "NM"
 
         mod_dict = {
             Mods.NOFAIL: "NF",
@@ -96,6 +96,7 @@ class Mods(IntFlag):
 
         for m in (_m for _m in Mods if self.value & _m and _m != Mods.SPEED_CHANGING):
             mod_str.append(mod_dict[m])
+
         return "".join(mod_str)
 
 
