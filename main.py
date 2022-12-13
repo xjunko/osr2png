@@ -15,7 +15,7 @@ from app.generation.common import vector
 from app.version import Version
 
 #
-CURRENT_VERSION = Version.from_str("0|6|1")
+CURRENT_VERSION = Version.from_str("0|7|0")
 
 
 def main(argv: list[str]) -> int:
@@ -27,6 +27,14 @@ def main(argv: list[str]) -> int:
     """ command-line arguments """
     parser = argparse.ArgumentParser(
         description="An open-source osu! thumbnail generator for lazy circle clickers."
+    )
+
+    # Info
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version=f"osr2png v{CURRENT_VERSION}",
     )
 
     # Source
