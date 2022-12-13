@@ -156,7 +156,11 @@ class Beatmap:
         data: dict[str, dict[str, str]] = {}
         category: str = ""
 
-        for line in path.read_text().splitlines():
+        # NOTE: in linux this works just fine
+        #       but on windows thing just shits the bed, fuck you windows.
+        for line in (
+            path.read_bytes().decode(encoding="utf-8", errors="ignore").splitlines()
+        ):
             if not line.strip():
                 continue
 
