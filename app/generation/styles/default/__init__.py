@@ -129,7 +129,7 @@ def generate(canvas: "Canvas") -> None:
 
     # PP
     canvas.assets.font.draw_text(
-        f"{canvas.context.info.pp:.2f}pp",  # type: ignore
+        f"{canvas.context.info.pp:.0f}pp",  # type: ignore
         alignment=TextAlignment.left,
         offset=[120, 60],
     )
