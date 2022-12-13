@@ -1,6 +1,6 @@
 # osr2png - rewrite³
 
-[![GitHub release](https://img.shields.io/github/release/xjunko/osr2png.svg?style=for-the-badge&logo=appveyor)](https://github.com/xjunko/osr2png/releases/latest)
+[![GitHub release](https://img.shields.io/github/release/xjunko/osr2png.svg?style=for-the-badge&logo=github)](https://github.com/xjunko/osr2png/releases/latest)
 
 osr2png is a CLI thumbnail generator for osu! maps.
 
