@@ -1,7 +1,7 @@
 from enum import IntEnum
 from typing import Any
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps
 
 from app.generation.common import CanvasSettings, vector
 from app.utils import CACHE_FOLDER
@@ -39,6 +39,7 @@ class TextComponent:
         alignment: TextAlignment = TextAlignment.left,
         text_size: int = TEXT_DEFAULT_SCALE,
         offset: list[int] = [0, 0],
+        bloom_color: tuple[int, int, int] | None = None,
     ) -> vector.Vector2:
         font = self.font
         font_size = text_size * self.settings.scale
@@ -78,6 +79,53 @@ class TextComponent:
         shadow_x, shadow_y = [
             position + 5 * self.settings.scale for position in [pos_x, pos_y]
         ]
+
+        # NOTE: bloom
+        if bloom_color:
+            _bloom_font_scale: float = 1.5
+            _bloom_canvas: Image.Image = Image.new(
+                "RGBA",
+                (
+                    int(text_width),
+                    int(text_height),
+                ),
+                (0, 0, 0, 0),
+            )
+
+            _bloom_draw: ImageDraw.ImageDraw = ImageDraw.Draw(_bloom_canvas)
+            _bloom_draw.text((0, 0), text, fill=bloom_color, font=font)
+
+            _bloom_canvas = _bloom_canvas.resize(
+                (
+                    int(text_width * _bloom_font_scale),
+                    int(text_height * _bloom_font_scale),
+                )
+            )
+
+            _bloom_bloom_space: float = 4
+
+            _bloom_canvas = ImageOps.expand(
+                _bloom_canvas,
+                ((text_width * _bloom_bloom_space) - _bloom_canvas.width) // 2,
+            )
+
+            _bloom_canvas = _bloom_canvas.filter(ImageFilter.GaussianBlur(50))
+            _bloom_canvas_brightness = ImageEnhance.Brightness(_bloom_canvas)
+
+            for _ in range(1, 3):
+                # HACK: lol fuck
+                _bloom_canvas = _bloom_canvas_brightness.enhance(3)
+                self.canvas.paste(
+                    _bloom_canvas,
+                    (
+                        int(pos_x - (text_width * 3) / 2),
+                        int(pos_y - ((text_width * 2.63)) / 2),
+                    ),
+                    mask=_bloom_canvas,
+                )
+
+            # shadow_color = None
+            # outline_color = None
 
         if shadow_color:  # Can be nullable to disable shadow
             self.draw.text((shadow_x, shadow_y), text, fill=shadow_color, font=font)
