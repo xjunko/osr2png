@@ -101,7 +101,7 @@ def main(argv: list[str]) -> int:
         "--background-border",
         help="[Optional] The border of beatmap background's dim.",
         type=float,
-        default=5,
+        default=25,
     )
 
     args = parser.parse_args()
