@@ -55,8 +55,15 @@ class Mods(IntFlag):
         return self.__repr__()
 
     def __repr__(self) -> str:
+        # NM returns NM
         if self.value == Mods.NOMOD:
             return "NM"
+
+        # Filter DT if NC
+        value: int = self.value
+
+        if value & Mods.NIGHTCORE:
+            value -= Mods.DOUBLETIME
 
         mod_dict = {
             Mods.NOFAIL: "NF",
@@ -94,7 +101,7 @@ class Mods(IntFlag):
 
         mod_str = []
 
-        for m in (_m for _m in Mods if self.value & _m and _m != Mods.SPEED_CHANGING):
+        for m in (_m for _m in Mods if value & _m and _m != Mods.SPEED_CHANGING):
             mod_str.append(mod_dict[m])
 
         return "".join(mod_str)
