@@ -26,7 +26,7 @@ def ensure_default_assets() -> int:
         "default_background.png": "https://assets.ppy.sh/contests/154/winners/Dreamxiety.png",
         "default_star.png": "https://cdn.discordapp.com/attachments/703552229680087042/1051736349163651072/0PTTQK8.png",
         "default_miss.png": "https://cdn.discordapp.com/attachments/703552229680087042/1051757293479403530/zfaT6fg.png",
-        "font.ttf": "https://cdn.discordapp.com/attachments/703552229680087042/1051747098674069524/2FW0Sne.ttf",
+        "font.ttf": "https://cdn.discordapp.com/attachments/703552229680087042/1066692446798483466/font.ttf",
     }
 
     for filename, url in default_assets_and_url.items():
