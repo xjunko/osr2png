@@ -11,7 +11,7 @@ from pathlib import Path
 
 import app.utils
 from app.gazo import Replay2Picture
-from app.generation.common import vector
+from app.generation.common import CanvasStyle, vector
 from app.version import Version
 
 #
@@ -61,7 +61,9 @@ def main(argv: list[str]) -> int:
     parser.add_argument(
         "-s",
         "--style",
-        help="[Todo] Style of Image | Unimplemented!",
+        help="Style of Image, [{}]".format(
+            " ".join([f"{n.value}: {n.name}" for n in CanvasStyle])
+        ),
         type=int,
         default=1,
     )

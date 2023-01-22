@@ -118,7 +118,7 @@ class Beatmap:
 
                 if bmap := beatmap.from_id(beatmap_id):  # type: ignore
                     # HACK: lol
-                    bmap.data["Metadata"]["MaxCombo"] = data.get("MaxCombo") # type: ignore
+                    bmap.data["Metadata"]["MaxCombo"] = data.get("MaxCombo")  # type: ignore
 
                     return bmap
 
