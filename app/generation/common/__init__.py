@@ -9,7 +9,8 @@ from . import vector
 
 
 class CanvasStyle(Enum):
-    default = 1 << 0
+    default = 1
+    akatsuki = 2
 
 
 @dataclass

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 
 from PIL import Image
 
@@ -62,8 +62,13 @@ class Canvas:
 
     def generate(self) -> Image.Image:
         # Generate with style
-        if self.settings.style == CanvasStyle.default:
-            styles.default.generate(self)
+        STYLE_GENERATOR: dict[CanvasStyle, Callable] = {
+            CanvasStyle.default: styles.default.generate,
+            CanvasStyle.akatsuki: styles.akatsuki.generate,
+        }
+
+        # NOTE: abit hacky
+        STYLE_GENERATOR.get(self.settings.style, styles.default.generate)(self)
 
         # Convert to RGB format
         self.canvas = self.canvas.convert("RGB")
