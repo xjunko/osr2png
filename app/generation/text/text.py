@@ -40,10 +40,16 @@ class TextComponent:
         text_size: int = TEXT_DEFAULT_SCALE,
         offset: list[int] = [0, 0],
         bloom_color: tuple[int, int, int] | None = None,
+        bloom_size: float = 1.0,
+        text_canvas_size: list[float] | None = None,
     ) -> vector.Vector2:
         font = self.font
         font_size = text_size * self.settings.scale
         pos_x, pos_y = [_ * self.settings.scale for _ in offset]
+
+        if not text_canvas_size:
+            _bypass_sane_check = False
+            text_canvas_size = [self.settings.resolution.x, self.settings.resolution.y]
 
         # Truncate
         if len(text) > 80:
@@ -55,8 +61,8 @@ class TextComponent:
 
         # Make sure text fits the screen
         while (
-            font.getsize(text)[0] > self.settings.resolution.x
-            and font_size > 20 * self.settings.scale
+            font.getsize(text)[0] > text_canvas_size[0]
+            and font_size > 15 * self.settings.scale
         ):
             font_size -= 1
             font = self.make_font(font_size)
@@ -81,8 +87,9 @@ class TextComponent:
         ]
 
         # NOTE: bloom
+        # HACK: This is fucked, like really fucked.
         if bloom_color:
-            _bloom_font_scale: float = 1.5
+            _bloom_font_scale: float = 1.1 * bloom_size
             _bloom_canvas: Image.Image = Image.new(
                 "RGBA",
                 (
@@ -112,14 +119,14 @@ class TextComponent:
             _bloom_canvas = _bloom_canvas.filter(ImageFilter.GaussianBlur(50))
             _bloom_canvas_brightness = ImageEnhance.Brightness(_bloom_canvas)
 
-            for _ in range(1, 3):
+            for _ in range(1, 2):
                 # HACK: lol fuck
                 _bloom_canvas = _bloom_canvas_brightness.enhance(3)
                 self.canvas.paste(
                     _bloom_canvas,
                     (
                         int(pos_x - (text_width * 3) / 2),
-                        int(pos_y - ((text_width * 2.63)) / 2),
+                        int(pos_y - ((text_width * 2.95)) / 2),
                     ),
                     mask=_bloom_canvas,
                 )
