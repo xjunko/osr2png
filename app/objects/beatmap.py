@@ -51,6 +51,10 @@ class Beatmap:
     def difficulty(self) -> str:
         return self.data.get("Metadata", {}).get("Version", SOMETHING_FUCKED_UP)
 
+    @property
+    def max_combo(self) -> int:
+        return int(self.data.get("Metadata", {}).get("MaxCombo", 0))
+
     """ calcs """
 
     def calculate_pp(
@@ -107,11 +111,16 @@ class Beatmap:
                 )
                 exit(1)
 
-            data = res.json()
+            data: dict[str, str | int | dict[str, str]] = res.json()
 
             if beatmap_id := data.get("BeatmapID", 0):
                 print(" success!")
-                return beatmap.from_id(beatmap_id)
+
+                if bmap := beatmap.from_id(beatmap_id):  # type: ignore
+                    # HACK: lol
+                    bmap.data["Metadata"]["MaxCombo"] = data.get("MaxCombo") # type: ignore
+
+                    return bmap
 
         print("[API] This should not happen, report this to me.")
         exit(1)
