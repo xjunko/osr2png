@@ -119,7 +119,6 @@ def generate(canvas: "Canvas") -> None:
         f"{canvas.context.info.difficulty.stars:.2f}",  # type: ignore
         alignment=TextAlignment.left,
         offset=[120, -100],
-        bloom_color=(255, 255, 0),
     )
 
     canvas.canvas.paste(
@@ -160,7 +159,6 @@ def generate(canvas: "Canvas") -> None:
             outline_color=(139, 10, 0),
             outline_stroke=4,
             shadow_color=None,
-            bloom_color=(255, 0, 0),
         )
 
     if canvas.settings.message:
