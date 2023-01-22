@@ -11,9 +11,7 @@ if TYPE_CHECKING:
 import app.utils
 
 
-def generate(canvas: "Canvas") -> None:
-    print("[Style::Default] Generating!")
-
+def _generate_background(canvas: "Canvas") -> None:
     # Background
     if canvas.settings.background_blur:
         # If blur
@@ -48,6 +46,8 @@ def generate(canvas: "Canvas") -> None:
         mask=dim,
     )
 
+
+def _generate_avatar(canvas: "Canvas") -> None:
     # Avatar
     canvas.assets.avatar = app.utils.resize_image_to_resolution_but_keep_ratio(
         canvas.assets.avatar,
@@ -79,6 +79,8 @@ def generate(canvas: "Canvas") -> None:
         ),
     )
 
+
+def _generate_text(canvas: "Canvas") -> None:
     # Text
 
     # Title
@@ -173,3 +175,11 @@ def generate(canvas: "Canvas") -> None:
             offset=[0, int(240 + y_offset)],
             text_size=int(TEXT_DEFAULT_SCALE * 1.4),
         )
+
+
+def generate(canvas: "Canvas") -> None:
+    print("[Style::Default] Generating!")
+
+    _generate_background(canvas)
+    _generate_avatar(canvas)
+    _generate_text(canvas)
