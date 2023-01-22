@@ -85,7 +85,7 @@ def main(argv: list[str]) -> int:
         "--background-dim",
         help="[Optional] The dim of beatmap background.",
         type=float,
-        default=0.4,
+        default=0.6,
     )
 
     parser.add_argument(
