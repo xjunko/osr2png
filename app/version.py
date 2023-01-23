@@ -33,7 +33,9 @@ class Version:
 
     @classmethod
     def from_str(cls, version_str: str) -> "Version":
-        major, minor, patch, *message = version_str.split("|")
+        version_raw, *message = version_str.split("|")
+
+        major, minor, patch = version_raw.split(".")
 
         ver: "Version" = cls()
         ver.major = int(major)

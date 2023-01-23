@@ -1,9 +1,12 @@
+import time
 from pathlib import Path
+from typing import Any
 
 import requests
 from PIL import Image
 
 from app.generation.common.vector import Vector2
+from app.version import Version
 
 CACHE_FOLDER: Path = Path.cwd() / ".cache"
 AVATAR_FOLDER: Path = CACHE_FOLDER / "avatar"
@@ -43,6 +46,35 @@ def ensure_default_assets() -> int:
 
                 print(" success!")
                 file_path.write_bytes(res.content)
+
+    return 0
+
+
+def ensure_up_to_date(current_version: Version) -> int:
+    print(f"[Version] Current version: {current_version!r}")
+    print(f"[Version] Checking github for a new version of osr2png,", end="")
+
+    with requests.Session() as session:
+        with session.get(
+            "https://api.github.com/repos/xjunko/osr2png/releases/latest"
+        ) as res:
+            if res.status_code != 200:
+                print(" failed!")
+                return 0
+
+            data: dict[Any, Any] = res.json()
+
+            github_version = Version.from_str(data["tag_name"])
+
+            print(" success!")
+
+            # Compare our version with github's
+            if github_version > current_version:
+                print("[Version] You're using an older version of osr2png.")
+                print("[Version] You can update it from here:", data["html_url"])
+                time.sleep(3)
+            else:
+                print("[Version] You're using the latest version of osr2png.")
 
     return 0
 

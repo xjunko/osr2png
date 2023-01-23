@@ -15,7 +15,7 @@ from app.generation.common import CanvasStyle, vector
 from app.version import Version
 
 #
-CURRENT_VERSION = Version.from_str("0|7|4")
+CURRENT_VERSION = Version.from_str("0.7.5")
 
 
 def main(argv: list[str]) -> int:
@@ -106,6 +106,14 @@ def main(argv: list[str]) -> int:
         default=25,
     )
 
+    # Misc options
+    parser.add_argument(
+        "-skip",
+        "--skip-update",
+        help="[Optional] Don't check for a new version on Github.",
+        action="store_true",
+    )
+
     args = parser.parse_args()
 
     if not args.replay and not args.beatmap:
@@ -115,6 +123,13 @@ def main(argv: list[str]) -> int:
         )
 
     if args.replay:
+        # Check for update
+        if not args.skip_update:
+            try:
+                app.utils.ensure_up_to_date(CURRENT_VERSION)
+            except Exception as _:
+                print("[Version] Failed to reached github.")
+
         replay_path: Path = Path(args.replay)
         beatmap_path: Path | None = None
 
