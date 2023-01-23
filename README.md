@@ -6,26 +6,32 @@ osr2png is a CLI thumbnail generator for osu! maps.
 
 as I am very lazy and only update this thing few times a year, lots of stuff gonna break. if that happens please file an issue.
 
-## Examples
-![](https://cdn.discordapp.com/attachments/703552229680087042/1051772453157871616/Vmdiqxj.png)
+## Styles
+
+## Style 1
+
 ![](https://cdn.discordapp.com/attachments/703552229680087042/1051775122790416404/umTspt7.png)
 ![](https://cdn.discordapp.com/attachments/703552229680087042/1051775374725500968/UfHxc0O.png)
 
+## Style 2
+
+![](https://cdn.discordapp.com/attachments/703552229680087042/1066939430977409024/FireRedz_-_Naoki_Miki_CV_-_Unhappy_End_World_shigurins_Hard.png)
+![](https://cdn.discordapp.com/attachments/703552229680087042/1066940160765333524/Honoka-Chan_-_FantasticYouth_-_No_title_No_difficulty_name.png)
 
 ## Running
 
 Latest binaries for Linux/Windows can be downloaded from [here](https://github.com/xjunko/osr2png/releases/latest).
 
-
 Simply unpack the file somewhere and run it with your terminal.
 
-
 ##### Linux / Powershell
+
 ```bash
 ./osr2png <arguments>
 ```
 
 ## Run arguments
+
 ```txt
 usage: osr2png [-h] [-r REPLAY] [-b BEATMAP] [-m MESSAGE] [-s STYLE] [-width WIDTH] [-height HEIGHT] [-dim BACKGROUND_DIM] [-blur BACKGROUND_BLUR] [-border BACKGROUND_BORDER]
 
@@ -56,7 +62,7 @@ options:
 Examples:
 
 ```
-./osr2png -r replay.osr 
+./osr2png -r replay.osr
 
 ./osr2png -r replay.osr -b beatmap_file.osu
 
@@ -67,6 +73,6 @@ Examples:
 
 ## Credits
 
-* [rosu-pp](https://github.com/MaxOhn/rosu-pp): The PP calculator used in this program.
-* [kitsu.moe](https://kitsu.moe/): The mirror that is used for getting the beatmap
- data.
+- [rosu-pp](https://github.com/MaxOhn/rosu-pp): The PP calculator used in this program.
+- [kitsu.moe](https://kitsu.moe/): The mirror that is used for getting the beatmap
+  data.
