@@ -33,12 +33,13 @@ Simply unpack the file somewhere and run it with your terminal.
 ## Run arguments
 
 ```txt
-usage: osr2png [-h] [-r REPLAY] [-b BEATMAP] [-m MESSAGE] [-s STYLE] [-width WIDTH] [-height HEIGHT] [-dim BACKGROUND_DIM] [-blur BACKGROUND_BLUR] [-border BACKGROUND_BORDER]
+usage: main.py [-h] [-v] [-r REPLAY] [-b BEATMAP] [-m MESSAGE] [-s STYLE] [-width WIDTH] [-height HEIGHT] [-dim BACKGROUND_DIM] [-blur BACKGROUND_BLUR] [-border BACKGROUND_BORDER]
 
 An open-source osu! thumbnail generator for lazy circle clickers.
 
 options:
   -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
   -r REPLAY, --replay REPLAY
                         [Optional] The path of the .osr file
   -b BEATMAP, --beatmap BEATMAP
@@ -46,7 +47,7 @@ options:
   -m MESSAGE, --message MESSAGE
                         [Optional] The extra text at the bottom
   -s STYLE, --style STYLE
-                        [Todo] Style of Image | Unimplemented!
+                        Style of Image, [1: default 2: akatsuki]
   -width WIDTH, --width WIDTH
                         [Optional] The width of the image.
   -height HEIGHT, --height HEIGHT
