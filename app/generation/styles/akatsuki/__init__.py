@@ -160,6 +160,7 @@ def _generate_text(canvas: "Canvas") -> None:
         shadow_color=None,
         text_size=int(TEXT_DEFAULT_SCALE * 0.9),
         bloom_color=(255, 255, 255),
+        text_canvas_size=[800 * canvas.settings.scale, 800 * canvas.settings.scale],
     )
 
     # Title
@@ -171,6 +172,7 @@ def _generate_text(canvas: "Canvas") -> None:
         text_size=int(TEXT_DEFAULT_SCALE * 0.9),
         color=(255, 255, 100),
         bloom_color=(255, 255, 100),
+        text_canvas_size=[800 * canvas.settings.scale, 800 * canvas.settings.scale],
     )
 
     # Diff
