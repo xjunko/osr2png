@@ -15,7 +15,7 @@ from app.generation.common import CanvasStyle, vector
 from app.version import Version
 
 #
-CURRENT_VERSION = Version.from_str("0.7.5")
+CURRENT_VERSION = Version.from_str("0.7.7")
 
 
 def main(argv: list[str]) -> int:
@@ -47,6 +47,11 @@ def main(argv: list[str]) -> int:
         "-b",
         "--beatmap",
         help="[Optional] The path of the .osu file, if using a custom beatmap.",
+    )
+
+    # Where to save
+    parser.add_argument(
+        "-o", "--output", help="[Optional] Change generated image filename."
     )
 
     # Image Gen
@@ -154,6 +159,7 @@ def main(argv: list[str]) -> int:
         background_dim=args.background_dim,
         background_border=args.background_border,
         message=args.message,
+        custom_filename=args.output,
     )
 
     return 0
