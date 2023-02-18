@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 from typing import Any, Optional
 
@@ -10,6 +11,10 @@ from app.objects.replay import ReplayInfo
 #
 OUTPUT_FOLDER: Path = Path.cwd() / "outputs"
 OUTPUT_FOLDER.mkdir(exist_ok=True)
+
+# Common
+DEFAULT_FILENAME_FORMAT: str = "[{name}] - ({artist} - {title} [{diff}])"
+FILENAME_INVALID_REGEX: re.Pattern = re.compile(r'[<>:"/\\|?*]')
 
 
 class Replay2Picture:
@@ -31,6 +36,8 @@ class Replay2Picture:
         print(" done!")
 
     def generate(self, style: int = 1, **kwargs: dict[Any, Any]) -> Path:
+        custom_filename: str = kwargs.pop("custom_filename", "")  # type: ignore
+
         settings: CanvasSettings = CanvasSettings(
             style=CanvasStyle(style),
             context=self,
@@ -40,14 +47,28 @@ class Replay2Picture:
         canvas: Canvas = Canvas.from_settings(settings=settings)
 
         image = canvas.generate()
-        filename: str = "[{name}] - ({artist} - {title} [{diff}]).png".format(
+
+        # Filename
+        filename: str = DEFAULT_FILENAME_FORMAT
+
+        if custom_filename:
+            filename = custom_filename.removesuffix(
+                ".png"
+            )  # Remove any trailing .png just incase
+
+        # Format the shit
+        filename: str = filename.format(
             name=canvas.context.replay.player_name,
             artist=canvas.context.beatmap.artist,
             title=canvas.context.beatmap.title,
             diff=canvas.context.beatmap.difficulty,
         )
 
-        result_image_path = OUTPUT_FOLDER / filename
+        filename = filename
+
+        result_image_path = OUTPUT_FOLDER / (
+            FILENAME_INVALID_REGEX.sub("", filename) + ".png"
+        )
         image.save(fp=result_image_path, format="png")
 
         return result_image_path
