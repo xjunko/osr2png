@@ -16,7 +16,10 @@ CACHE_FOLDER.mkdir(exist_ok=True, parents=True)
 # URL(s)
 OSU_RAW_URL: str = "https://osu.ppy.sh/osu/{id}"
 OSU_BACKGROUND_URL: str = "https://assets.ppy.sh/beatmaps/{set_id}/covers/fullsize.jpg"
-KITSU_MD5_URL: str = "https://kitsu.moe/api/md5/{md5}"
+KITSU_MD5_URL: str = "https://osu.direct/api/md5/{md5}"
+
+# Internal
+USER_AGENT: str = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"
 
 
 class Beatmap:
@@ -28,6 +31,9 @@ class Beatmap:
         self.data: dict[str, dict[str, str]] = data
         self.http: requests.Session = requests.Session()
         self.path = beatmap_path
+
+        # Set header
+        self.http.headers.update({"User-Agent": USER_AGENT})
 
     """ trollhd """
 
