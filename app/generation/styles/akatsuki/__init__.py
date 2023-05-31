@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 
 __all__: list[str] = ["generate"]
 
+
 # Internals
 def _generate_background(canvas: "Canvas") -> None:
     # Background
@@ -210,9 +211,16 @@ def _generate_text(canvas: "Canvas") -> None:
     judge_text: str = "FC"
     judge_color: tuple[int, int, int] = (255, 255, 100)
 
+    # NOTE: If missed for sure.
     if canvas.context.replay.accuracy and canvas.context.replay.accuracy.hitmiss:
         judge_text = f"{canvas.context.replay.accuracy.hitmiss}xMiss"
         judge_color = (255, 0, 0)
+
+    # HACK: If there's no misses but combo doesnt reach >= 60% of the max beatmap combo,
+    # HACK: Just show "?"
+    if (canvas.context.replay.max_combo / canvas.context.beatmap.max_combo) <= 0.6 and judge_text == "FC":  # type: ignore
+        judge_text = "?"
+        judge_color = (255, 255, 0)
 
     canvas.assets.font.draw_text(
         judge_text,  # type: ignore
