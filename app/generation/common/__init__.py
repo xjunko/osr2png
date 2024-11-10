@@ -1,4 +1,7 @@
-from dataclasses import dataclass, field
+from __future__ import annotations
+
+from dataclasses import dataclass
+from dataclasses import field
 from enum import Enum
 from typing import TYPE_CHECKING
 
@@ -17,7 +20,7 @@ class CanvasStyle(Enum):
 class CanvasSettings:
     resolution: vector.Vector2 = field(default_factory=vector.Vector2(x=1920, y=1080))  # type: ignore
     style: CanvasStyle = field(default=CanvasStyle.default)
-    context: "Replay2Picture" = field(default=None)  # type: ignore
+    context: Replay2Picture = field(default=None)  # type: ignore
 
     #
     background_blur: float = field(default=5)

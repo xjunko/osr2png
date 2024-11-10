@@ -1,9 +1,17 @@
+from __future__ import annotations
+
 from enum import IntEnum
 from typing import Any
 
-from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageEnhance
+from PIL import ImageFilter
+from PIL import ImageFont
+from PIL import ImageOps
 
-from app.generation.common import CanvasSettings, vector
+from app.generation.common import CanvasSettings
+from app.generation.common import vector
 from app.utils import CACHE_FOLDER
 
 #
@@ -45,7 +53,7 @@ class TextComponent:
     ) -> vector.Vector2:
         font = self.font
         font_size = text_size * self.settings.scale
-        pos_x, pos_y = [_ * self.settings.scale for _ in offset]
+        pos_x, pos_y = (_ * self.settings.scale for _ in offset)
 
         if not text_canvas_size:
             _bypass_sane_check = False
@@ -69,7 +77,9 @@ class TextComponent:
 
         # Font size
         _, _, text_width, text_height = self.draw.textbbox(
-            xy=(0, 0), text=text, font=font
+            xy=(0, 0),
+            text=text,
+            font=font,
         )
 
         # Text alignment
@@ -84,9 +94,9 @@ class TextComponent:
             pos_y = (self.settings.resolution.y + pos_y) / 2
 
         # Shadow Position
-        shadow_x, shadow_y = [
+        shadow_x, shadow_y = (
             position + 5 * self.settings.scale for position in [pos_x, pos_y]
-        ]
+        )
 
         # NOTE: bloom
         # HACK: This is fucked, like really fucked.
@@ -108,7 +118,7 @@ class TextComponent:
                 (
                     int(text_width * _bloom_font_scale),
                     int(text_height * _bloom_font_scale),
-                )
+                ),
             )
 
             _bloom_bloom_space: float = 4
@@ -128,7 +138,7 @@ class TextComponent:
                     _bloom_canvas,
                     (
                         int(pos_x - (text_width * 3) / 2),
-                        int(pos_y - ((text_width * 2.95)) / 2),
+                        int(pos_y - (text_width * 2.95) / 2),
                     ),
                     mask=_bloom_canvas,
                 )
@@ -148,5 +158,6 @@ class TextComponent:
 
         # Return position next to text
         return vector.Vector2(
-            x=int(pos_x + text_width + 5 * self.settings.scale), y=int(pos_y)
+            x=int(pos_x + text_width + 5 * self.settings.scale),
+            y=int(pos_y),
         )

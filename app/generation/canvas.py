@@ -1,11 +1,15 @@
+from __future__ import annotations
+
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 from PIL import Image
 
 import app.utils
 from app.generation import styles
-from app.generation.common import CanvasSettings, CanvasStyle
+from app.generation.common import CanvasSettings
+from app.generation.common import CanvasStyle
 from app.generation.common.vector import Vector2
 from app.generation.text.text import TextComponent
 
@@ -21,12 +25,12 @@ class DefaultAssets:
     miss: Image.Image
 
     @classmethod
-    def load_default_assets(cls, settings: CanvasSettings) -> "DefaultAssets":
+    def load_default_assets(cls, settings: CanvasSettings) -> DefaultAssets:
         avatar = Image.open(app.utils.CACHE_FOLDER / "default_avatar.png").convert(
-            "RGBA"
+            "RGBA",
         )
         background = Image.open(
-            app.utils.CACHE_FOLDER / "default_background.png"
+            app.utils.CACHE_FOLDER / "default_background.png",
         ).convert("RGBA")
 
         star = Image.open(app.utils.CACHE_FOLDER / "default_star.png").convert("RGBA")
@@ -34,7 +38,8 @@ class DefaultAssets:
 
         # Resize background to fit image
         background = app.utils.resize_image_to_resolution_but_keep_ratio(
-            background, settings.resolution
+            background,
+            settings.resolution,
         )
 
         return cls(avatar=avatar, background=background, star=star, miss=miss)
@@ -76,14 +81,15 @@ class Canvas:
         return self.canvas
 
     @classmethod
-    def from_settings(cls, settings: CanvasSettings) -> "Canvas":
-        canvas: "Canvas" = cls()
+    def from_settings(cls, settings: CanvasSettings) -> Canvas:
+        canvas: Canvas = cls()
         canvas.settings = settings
         canvas.context = settings.context
 
         # Set up canvas
         canvas.canvas = Image.new(
-            mode="RGBA", size=(canvas.settings.resolution.x, canvas.settings.resolution.y)  # type: ignore | cope
+            mode="RGBA",
+            size=(canvas.settings.resolution.x, canvas.settings.resolution.y),  # type: ignore | cope
         )
 
         # Load Assets

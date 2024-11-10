@@ -1,10 +1,12 @@
 """ api.py - v1 and v2 api wrapper """
+from __future__ import annotations
 
 from pathlib import Path
 from typing import Self
 
 import requests
-from ossapi import Ossapi, UserLookupKey
+from ossapi import Ossapi
+from ossapi import UserLookupKey
 
 # Errors
 MISSING_FILE = "[Error] Failed to read api key file [apikey.txt], create it."
@@ -26,7 +28,8 @@ class LegacyAPI:
 
     def get_player_id(self, name: str) -> int | None:
         with self.session.get(
-            f"https://osu.ppy.sh/api/get_user", params={"k": self.key, "u": name}
+            f"https://osu.ppy.sh/api/get_user",
+            params={"k": self.key, "u": name},
         ) as res:
             if not res or res.status_code != 200:
                 print("[API] Failed to get player id from osu! v1 api!")
@@ -38,7 +41,8 @@ class LegacyAPI:
 
     def get_beatmap_id_from_md5(self, md5: str) -> int:
         with self.session.get(
-            f"https://osu.ppy.sh/api/get_beatmaps", params={"k": self.key, "h": md5}
+            f"https://osu.ppy.sh/api/get_beatmaps",
+            params={"k": self.key, "h": md5},
         ) as res:
             if not res or res.status_code != 200:
                 print("[API] Failed to get beatmap id from osu! v1 api!")
@@ -60,7 +64,8 @@ class ModernAPI(LegacyAPI):
 
 
 class APIWrapper:
-    def __init__(self) -> None: ...
+    def __init__(self) -> None:
+        ...
 
     @classmethod
     def from_api_v1_key(cls, key: str) -> Self:

@@ -1,10 +1,16 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
-from PIL import Image, ImageFilter, ImageOps
+from PIL import Image
+from PIL import ImageFilter
+from PIL import ImageOps
 
 import app.utils
 from app.generation.common import vector
-from app.generation.text.text import TEXT_DEFAULT_SCALE, TextAlignment, TextComponent
+from app.generation.text.text import TEXT_DEFAULT_SCALE
+from app.generation.text.text import TextAlignment
+from app.generation.text.text import TextComponent
 
 if TYPE_CHECKING:
     from app.generation.canvas import Canvas
@@ -13,12 +19,12 @@ __all__: list[str] = ["generate"]
 
 
 # Internals
-def _generate_background(canvas: "Canvas") -> None:
+def _generate_background(canvas: Canvas) -> None:
     # Background
     if canvas.settings.background_blur:
         # If blur
         canvas.assets.background = canvas.assets.background.filter(
-            ImageFilter.GaussianBlur(radius=canvas.settings.background_blur)
+            ImageFilter.GaussianBlur(radius=canvas.settings.background_blur),
         )
 
     canvas.canvas.paste(canvas.assets.background)
@@ -52,7 +58,7 @@ def _generate_background(canvas: "Canvas") -> None:
     )
 
 
-def _generate_line(canvas: "Canvas") -> None:
+def _generate_line(canvas: Canvas) -> None:
     # Line
     top_space: int = int(160 * canvas.settings.scale)
 
@@ -107,12 +113,13 @@ def _generate_line(canvas: "Canvas") -> None:
     )
 
 
-def _generate_avatar(canvas: "Canvas") -> None:
+def _generate_avatar(canvas: Canvas) -> None:
     # Avatar
     canvas.assets.avatar = app.utils.resize_image_to_resolution_but_keep_ratio(
         canvas.assets.avatar,
         vector.Vector2(
-            x=200.0 * canvas.settings.scale, y=200.0 * canvas.settings.scale
+            x=200.0 * canvas.settings.scale,
+            y=200.0 * canvas.settings.scale,
         ),
     )
 
@@ -140,7 +147,7 @@ def _generate_avatar(canvas: "Canvas") -> None:
     )
 
 
-def _generate_text(canvas: "Canvas") -> None:
+def _generate_text(canvas: Canvas) -> None:
     # Text
     canvas.assets.font.draw_text(
         f"{canvas.context.replay.player_name}",
@@ -233,7 +240,7 @@ def _generate_text(canvas: "Canvas") -> None:
     )
 
 
-def generate(canvas: "Canvas") -> None:
+def generate(canvas: Canvas) -> None:
     print("[Style::Akatsuki] Generating!")
 
     _generate_background(canvas)

@@ -1,10 +1,16 @@
+from __future__ import annotations
+
 import re
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
+from typing import Optional
 
 from rosu_pp_py import PerformanceAttributes
 
-from app.generation.canvas import Canvas, CanvasSettings, CanvasStyle, Vector2
+from app.generation.canvas import Canvas
+from app.generation.canvas import CanvasSettings
+from app.generation.canvas import CanvasStyle
+from app.generation.canvas import Vector2
 from app.objects.beatmap import Beatmap
 from app.objects.replay import ReplayInfo
 
@@ -53,7 +59,7 @@ class Replay2Picture:
 
         if custom_filename:
             filename = custom_filename.removesuffix(
-                ".png"
+                ".png",
             )  # Remove any trailing .png just incase
 
         # Format the shit
@@ -75,11 +81,13 @@ class Replay2Picture:
 
     @classmethod
     def from_replay_file(
-        cls, replay_path: Path, beatmap_file: Optional[Path] = None
-    ) -> "Replay2Picture":
+        cls,
+        replay_path: Path,
+        beatmap_file: Path | None = None,
+    ) -> Replay2Picture:
         print(f"[Replay2Picture] File: `{replay_path.name}`")
 
-        self: "Replay2Picture" = cls()
+        self: Replay2Picture = cls()
         self.replay = ReplayInfo.from_file(replay_path)
 
         if not beatmap_file and self.replay.beatmap_md5:
@@ -92,4 +100,5 @@ class Replay2Picture:
         return self
 
     @classmethod
-    def from_beatmap_file(cls, beatmap_file: Path) -> "Replay2Picture": ...
+    def from_beatmap_file(cls, beatmap_file: Path) -> Replay2Picture:
+        ...

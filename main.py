@@ -1,9 +1,10 @@
 """
     main.py - the start of everything
 """
+from __future__ import annotations
 
 __author__ = "xJunko"
-__discord__ = "FireRedz#0537"
+__discord__ = "xjunko"
 
 import argparse
 import sys
@@ -19,14 +20,14 @@ CURRENT_VERSION = Version.from_str("0.8.1")
 
 
 def main(argv: list[str]) -> int:
-    """Ensure shit is okay to run"""
+    """Ensure program is okay to run"""
     for early_task in [app.utils.ensure_directories, app.utils.ensure_default_assets]:
         if ret_code := early_task():
             return ret_code
 
     """ command-line arguments """
     parser = argparse.ArgumentParser(
-        description="An open-source osu! thumbnail generator for lazy circle clickers."
+        description="An open-source osu! thumbnail generator for lazy circle clickers.",
     )
 
     # Info
@@ -51,7 +52,9 @@ def main(argv: list[str]) -> int:
 
     # Where to save
     parser.add_argument(
-        "-o", "--output", help="[Optional] Change generated image filename."
+        "-o",
+        "--output",
+        help="[Optional] Change generated image filename.",
     )
 
     # Image Gen
@@ -67,7 +70,7 @@ def main(argv: list[str]) -> int:
         "-s",
         "--style",
         help="Style of Image, [{}]".format(
-            " ".join([f"{n.value}: {n.name}" for n in CanvasStyle])
+            " ".join([f"{n.value}: {n.name}" for n in CanvasStyle]),
         ),
         type=int,
         default=1,
@@ -124,7 +127,7 @@ def main(argv: list[str]) -> int:
     if not args.replay and not args.beatmap:
         parser.print_help()
         parser.error(
-            "You didnt give me shit, please pass `.osr` or `.osu` file into the params."
+            "No argument passed, please give `.osr` or `.osu` file into the params.",
         )
 
     if args.replay:
@@ -142,7 +145,8 @@ def main(argv: list[str]) -> int:
             beatmap_path = Path(args.beatmap)
 
         replay = Replay2Picture.from_replay_file(
-            replay_path=Path(replay_path), beatmap_file=beatmap_path
+            replay_path=Path(replay_path),
+            beatmap_file=beatmap_path,
         )
     else:
         # Generate from beatmap file only, SS everything.

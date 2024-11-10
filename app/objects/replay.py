@@ -1,9 +1,13 @@
 """
     replay.py - ripped off from cmyui's common lib
 """
+from __future__ import annotations
+
 import os
 from dataclasses import dataclass
-from enum import IntEnum, IntFlag, unique
+from enum import IntEnum
+from enum import IntFlag
+from enum import unique
 from pathlib import Path
 from typing import Optional
 
@@ -139,28 +143,28 @@ class Accuracy:
 
 class ReplayInfo:
     def __init__(self) -> None:
-        self.mode: Optional[Mode] = None
-        self.client_version: Optional[int] = None
+        self.mode: Mode | None = None
+        self.client_version: int | None = None
 
-        self.beatmap_md5: Optional[str] = None
-        self.player_name: Optional[str] = None
-        self.replay_md5: Optional[str] = None
+        self.beatmap_md5: str | None = None
+        self.player_name: str | None = None
+        self.replay_md5: str | None = None
 
-        self.accuracy: Optional[Accuracy] = None
-        self.score: Optional[int] = None
-        self.max_combo: Optional[int] = None
-        self.is_perfect: Optional[bool] = None
-        self.mods: Optional[Mods] = None
+        self.accuracy: Accuracy | None = None
+        self.score: int | None = None
+        self.max_combo: int | None = None
+        self.is_perfect: bool | None = None
+        self.mods: Mods | None = None
 
-        self.view: Optional[memoryview] = None
+        self.view: memoryview | None = None
 
     @classmethod
-    def from_file(cls, filepath: str | Path) -> "ReplayInfo":
+    def from_file(cls, filepath: str | Path) -> ReplayInfo:
         if not (path := Path(filepath)).exists():
             print("[Replay] Failed to load replay file, exiting!")
             os._exit(1)
 
-        replay: "ReplayInfo" = cls()
+        replay: ReplayInfo = cls()
         replay.view = memoryview(path.read_bytes())
         replay.parse()
 
@@ -201,7 +205,7 @@ class ReplayInfo:
 
         return b""
 
-    def read_short(self) -> Optional[int]:
+    def read_short(self) -> int | None:
         return int.from_bytes(self.read_byte(2), "little", signed=True)
 
     def read_int(self) -> int:

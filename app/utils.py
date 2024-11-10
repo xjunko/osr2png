@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import time
 from pathlib import Path
 from typing import Any
@@ -44,7 +46,7 @@ def ensure_default_assets() -> int:
                 if res.status_code != 200 and len(res.content) < 2048:
                     print(" failed!")
                     print(
-                        f"[Startup] Might want to put your own files in place there, `{file_path.resolve()}`."
+                        f"[Startup] Might want to put your own files in place there, `{file_path.resolve()}`.",
                     )
 
                 print(" success!")
@@ -59,7 +61,7 @@ def ensure_up_to_date(current_version: Version) -> int:
 
     with requests.Session() as session:
         with session.get(
-            "https://api.github.com/repos/xjunko/osr2png/releases/latest"
+            "https://api.github.com/repos/xjunko/osr2png/releases/latest",
         ) as res:
             if res.status_code != 200:
                 print(" failed!")
@@ -86,7 +88,8 @@ def ensure_up_to_date(current_version: Version) -> int:
 
 
 def resize_image_to_resolution_but_keep_ratio(
-    img: Image.Image, resolution: Vector2
+    img: Image.Image,
+    resolution: Vector2,
 ) -> Image.Image:
     ratio = resolution.x / img.width
 

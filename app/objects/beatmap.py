@@ -1,8 +1,11 @@
+from __future__ import annotations
+
 from pathlib import Path
 
 import requests
 from rosu_pp_py import Beatmap as PPBeatmap
-from rosu_pp_py import Performance, PerformanceAttributes
+from rosu_pp_py import Performance
+from rosu_pp_py import PerformanceAttributes
 
 import app.utils
 
@@ -19,16 +22,16 @@ OSU_BACKGROUND_URL: str = "https://assets.ppy.sh/beatmaps/{set_id}/covers/fullsi
 KITSU_MD5_URL: str = "https://osu.direct/api/md5/{md5}"
 
 # Internal
-USER_AGENT: str = (
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"
-)
+USER_AGENT: str = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"
 
 
 class Beatmap:
     data: dict[str, dict[str, str]]
 
     def __init__(
-        self, data: dict[str, dict[str, str]] = {}, beatmap_path: Path | None = None
+        self,
+        data: dict[str, dict[str, str]] = {},
+        beatmap_path: Path | None = None,
     ) -> None:
         self.data: dict[str, dict[str, str]] = data
         self.http: requests.Session = requests.Session()
@@ -63,11 +66,15 @@ class Beatmap:
     """ calcs """
 
     def calculate_pp(
-        self, mods: int, acc: float, combo: int, misses: int
+        self,
+        mods: int,
+        acc: float,
+        combo: int,
+        misses: int,
     ) -> PerformanceAttributes:
         if self.path and not self.path.exists():
             print(
-                "[Beatmap] The fuck, cached beatmap file is gone... Try running the thing again?"
+                "[Beatmap] The fuck, cached beatmap file is gone... Try running the thing again?",
             )
 
         pp_bmap = PPBeatmap(path=str(self.path))
@@ -90,7 +97,7 @@ class Beatmap:
                 if res.status_code != 200:
                     print(" failed.")
                     print(
-                        "[API] Failed to get beatmap background, using the default one."
+                        "[API] Failed to get beatmap background, using the default one.",
                     )
                     return app.utils.CACHE_FOLDER / "default_background.png"
 
@@ -114,7 +121,7 @@ class Beatmap:
 
     @classmethod
     def from_md5(cls, md5: str):
-        beatmap: "Beatmap" = cls()
+        beatmap: Beatmap = cls()
 
         current_id: int = 0
 
@@ -123,7 +130,8 @@ class Beatmap:
             beatmap.get_id_from_md5_kitsu,
         ]:
             print(
-                f"[API] Trying to get beatmap id from {api_method.__name__}, ", end=""
+                f"[API] Trying to get beatmap id from {api_method.__name__}, ",
+                end="",
             )
             try:
                 if (current_id := api_method(md5)) != 0:
@@ -143,7 +151,7 @@ class Beatmap:
 
     @classmethod
     def from_id(cls, id: int):
-        beatmap: "Beatmap" = cls()
+        beatmap: Beatmap = cls()
 
         # Get raw .osu file from osu, if not in cache
         if not (beatmap_file := CACHE_FOLDER / str(id)).exists():
@@ -154,7 +162,7 @@ class Beatmap:
                     print(" failed.")
                     print("[API] Failed to get beatmap file from osu!.")
                     print(
-                        "[API] If this is a custom beatmap, please pass the beatmap path with `-b` param."
+                        "[API] If this is a custom beatmap, please pass the beatmap path with `-b` param.",
                     )
                     exit(1)
 
@@ -165,8 +173,8 @@ class Beatmap:
         return beatmap.from_osu_file(beatmap_file)
 
     @classmethod
-    def from_osu_file(cls, path: Path) -> "Beatmap":
-        beatmap: "Beatmap" = cls(beatmap_path=path)
+    def from_osu_file(cls, path: Path) -> Beatmap:
+        beatmap: Beatmap = cls(beatmap_path=path)
 
         beatmap.data |= beatmap._parse_beatmap_file_from_path(path)
         return beatmap

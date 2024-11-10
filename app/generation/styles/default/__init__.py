@@ -1,9 +1,14 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
-from PIL import Image, ImageFilter
+from PIL import Image
+from PIL import ImageFilter
 
 from app.generation.common import vector
-from app.generation.text.text import TEXT_DEFAULT_SCALE, TextAlignment, TextComponent
+from app.generation.text.text import TEXT_DEFAULT_SCALE
+from app.generation.text.text import TextAlignment
+from app.generation.text.text import TextComponent
 
 if TYPE_CHECKING:
     from app.generation.canvas import Canvas
@@ -11,12 +16,12 @@ if TYPE_CHECKING:
 import app.utils
 
 
-def _generate_background(canvas: "Canvas") -> None:
+def _generate_background(canvas: Canvas) -> None:
     # Background
     if canvas.settings.background_blur:
         # If blur
         canvas.assets.background = canvas.assets.background.filter(
-            ImageFilter.GaussianBlur(radius=canvas.settings.background_blur)
+            ImageFilter.GaussianBlur(radius=canvas.settings.background_blur),
         )
 
     canvas.canvas.paste(canvas.assets.background)
@@ -27,11 +32,11 @@ def _generate_background(canvas: "Canvas") -> None:
         size=(
             int(
                 canvas.settings.resolution.x
-                - (canvas.settings.background_border * canvas.settings.scale)
+                - (canvas.settings.background_border * canvas.settings.scale),
             ),
             int(
                 canvas.settings.resolution.y
-                - (canvas.settings.background_border * canvas.settings.scale)
+                - (canvas.settings.background_border * canvas.settings.scale),
             ),
         ),
         color=(0, 0, 0, int(255 * canvas.settings.background_dim)),
@@ -47,12 +52,13 @@ def _generate_background(canvas: "Canvas") -> None:
     )
 
 
-def _generate_avatar(canvas: "Canvas") -> None:
+def _generate_avatar(canvas: Canvas) -> None:
     # Avatar
     canvas.assets.avatar = app.utils.resize_image_to_resolution_but_keep_ratio(
         canvas.assets.avatar,
         vector.Vector2(
-            x=200.0 * canvas.settings.scale, y=200.0 * canvas.settings.scale
+            x=200.0 * canvas.settings.scale,
+            y=200.0 * canvas.settings.scale,
         ),
     )
 
@@ -80,7 +86,7 @@ def _generate_avatar(canvas: "Canvas") -> None:
     )
 
 
-def _generate_text(canvas: "Canvas") -> None:
+def _generate_text(canvas: Canvas) -> None:
     # Text
 
     # Title
@@ -142,7 +148,8 @@ def _generate_text(canvas: "Canvas") -> None:
             app.utils.resize_image_to_resolution_but_keep_ratio(
                 canvas.assets.default.miss,
                 vector.Vector2(
-                    x=120 * canvas.settings.scale, y=120 * canvas.settings.scale
+                    x=120 * canvas.settings.scale,
+                    y=120 * canvas.settings.scale,
                 ),
             )
         )
@@ -177,7 +184,7 @@ def _generate_text(canvas: "Canvas") -> None:
         )
 
 
-def generate(canvas: "Canvas") -> None:
+def generate(canvas: Canvas) -> None:
     print("[Style::Default] Generating!")
 
     _generate_background(canvas)

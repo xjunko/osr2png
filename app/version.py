@@ -1,4 +1,5 @@
 """ version.py - chad scuffed version class"""
+from __future__ import annotations
 
 
 class Version:
@@ -17,14 +18,14 @@ class Version:
             + ["", f" [{self.message}]"][len(self.message) > 0]  # type: ignore
         )
 
-    def __gt__(self, other: "Version") -> bool:
+    def __gt__(self, other: Version) -> bool:
         return [self.major, self.minor, self.patch] > [
             other.major,
             other.minor,
             other.patch,
         ]
 
-    def __lt__(self, other: "Version") -> bool:
+    def __lt__(self, other: Version) -> bool:
         return [self.major, self.minor, self.patch] < [
             other.major,
             other.minor,
@@ -32,12 +33,12 @@ class Version:
         ]
 
     @classmethod
-    def from_str(cls, version_str: str) -> "Version":
+    def from_str(cls, version_str: str) -> Version:
         version_raw, *message = version_str.split("|")
 
         major, minor, patch = version_raw.split(".")
 
-        ver: "Version" = cls()
+        ver: Version = cls()
         ver.major = int(major)
         ver.minor = int(minor)
         ver.patch = int(patch)
