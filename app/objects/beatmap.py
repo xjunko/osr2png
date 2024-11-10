@@ -164,7 +164,7 @@ class Beatmap:
                     print(
                         "[API] If this is a custom beatmap, please pass the beatmap path with `-b` param.",
                     )
-                    exit(1)
+                    raise SystemExit(1)
 
                 print(" success!")
                 beatmap_file.write_bytes(res.content)

@@ -81,7 +81,7 @@ class APIWrapper:
             print(MISSING_FILE)
             print(SOLUTION_API_V1)
             print(SOLUTION_API_V2)
-            exit(1)
+            raise SystemExit(1)
 
         # Read values
         lines: list[str] = [
@@ -93,7 +93,7 @@ class APIWrapper:
             print(EMPTY_FILE)
             print(SOLUTION_API_V1)
             print(SOLUTION_API_V2)
-            exit(1)
+            raise SystemExit(1)
 
         # V1
         if len(lines) == 1:
@@ -107,4 +107,4 @@ class APIWrapper:
         print("[API] Invalid api key file.")
         print(SOLUTION_API_V1)
         print(SOLUTION_API_V2)
-        exit(1)
+        raise SystemExit(1)
