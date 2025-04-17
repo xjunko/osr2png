@@ -15,7 +15,9 @@ API_KEY_FILE: Path = Path.cwd() / "apikey.txt"
 CACHE_FOLDER: Path = Path.cwd() / ".cache"
 AVATAR_FOLDER: Path = CACHE_FOLDER / "avatar"
 
-API_CLIENT: api.APIWrapper = api.APIWrapper.from_file(API_KEY_FILE)
+
+def get_api_client() -> api.APIWrapper:
+    return api.APIWrapper.from_file(API_KEY_FILE)
 
 
 def ensure_directories() -> int:
@@ -97,10 +99,11 @@ def resize_image_to_resolution_but_keep_ratio(
 
 
 def get_player_avatar(name: str) -> Path:
+    api_client: api.APIWrapper = get_api_client()
     session: requests.Session = requests.Session()
 
     if not (avatar_path := AVATAR_FOLDER / name).exists():
-        if not (user_id := API_CLIENT.get_player_id(name)):
+        if not (user_id := api_client.get_player_id(name)):
             return CACHE_FOLDER / "default_avatar.png"
 
         # Download

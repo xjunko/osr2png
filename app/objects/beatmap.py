@@ -8,6 +8,7 @@ from rosu_pp_py import Performance
 from rosu_pp_py import PerformanceAttributes
 
 import app.utils
+from app.objects import api
 
 #
 CACHE_FOLDER: Path = app.utils.CACHE_FOLDER / "osu"
@@ -35,6 +36,7 @@ class Beatmap:
     ) -> None:
         self.data: dict[str, dict[str, str]] = data
         self.http: requests.Session = requests.Session()
+        self.api_client: api.APIWrapper = app.utils.get_api_client()
         self.path = beatmap_path
 
         self.http.headers.update({"User-Agent": USER_AGENT})  # Set header
@@ -117,7 +119,7 @@ class Beatmap:
             return res.json().get("BeatmapID", 0)
 
     def get_id_from_md5_osu(self, md5: str) -> int:
-        return app.utils.API_CLIENT.get_beatmap_id_from_md5(md5)
+        return self.api_client.get_beatmap_id_from_md5(md5)
 
     @classmethod
     def from_md5(cls, md5: str):

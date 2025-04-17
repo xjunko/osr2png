@@ -1,5 +1,5 @@
 """
-    main.py - the start of everything
+main.py - the start of everything
 """
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ from app.generation.common import CanvasStyle, vector
 from app.version import Version
 
 #
-CURRENT_VERSION = Version.from_str("0.8.2")
+CURRENT_VERSION = Version.from_str("0.8.3")
 
 
 def main(argv: list[str]) -> int:
